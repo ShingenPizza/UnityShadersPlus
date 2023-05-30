@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_META_INCLUDED
 #define UNITY_STANDARD_META_INCLUDED
 
@@ -9,7 +11,7 @@
 #include "UnityCG.cginc"
 #include "UnityStandardInput.cginc"
 #include "UnityMetaPass.cginc"
-#include "UnityStandardCore.cginc"
+#include "UnityStandardCore Plus.cginc"
 
 struct v2f_meta
 {
@@ -53,6 +55,8 @@ half3 UnityLightmappingAlbedo (half3 diffuse, half3 specular, half smoothness)
 
 float4 frag_meta (v2f_meta i) : SV_Target
 {
+    check_visibility();
+
     // we're interested in diffuse & specular colors,
     // and surface roughness to produce final albedo.
     FragmentCommonData data = UNITY_SETUP_BRDF_INPUT (i.uv);

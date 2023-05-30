@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_PARTICLES_INCLUDED
 #define UNITY_STANDARD_PARTICLES_INCLUDED
 
@@ -14,6 +16,8 @@
 #include "HLSLSupport.cginc"
 #include "UnityPBSLighting.cginc"
 #include "UnityStandardParticleInstancing.cginc"
+
+#include "PlusStuff.cginc"
 
 // Particles surface shader has a lot of variants in it, but some of those do not affect
 // code generation (i.e. don't have inpact on which Input/SurfaceOutput things are read or written into).
@@ -368,6 +372,8 @@ void vertParticleUnlit (appdata_particles v, out VertexOutput o)
 
 half4 fragParticleUnlit(VertexOutput IN) : SV_Target
 {
+    check_visibility();
+
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
     half4 albedo = readTexture (_MainTex, IN);
     albedo *= _Color;

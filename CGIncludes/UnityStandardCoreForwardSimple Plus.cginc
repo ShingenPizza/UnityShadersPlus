@@ -1,9 +1,11 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_CORE_FORWARD_SIMPLE_INCLUDED
 #define UNITY_STANDARD_CORE_FORWARD_SIMPLE_INCLUDED
 
-#include "UnityStandardCore.cginc"
+#include "UnityStandardCore Plus.cginc"
 
 //  Does not support: _PARALLAXMAP, DIRLIGHTMAP_COMBINED
 #define GLOSSMAP (defined(_SPECGLOSSMAP) || defined(_METALLICGLOSSMAP))
@@ -197,6 +199,8 @@ half3 BRDF3DirectSimple(half3 diffColor, half3 specColor, half smoothness, half 
 
 half4 fragForwardBaseSimpleInternal (VertexOutputBaseSimple i)
 {
+    check_visibility();
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FragmentCommonData s = FragmentSetupSimple(i);
@@ -349,6 +353,8 @@ half3 LightSpaceNormal(VertexOutputForwardAddSimple i, FragmentCommonData s)
 
 half4 fragForwardAddSimpleInternal (VertexOutputForwardAddSimple i)
 {
+    check_visibility();
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FragmentCommonData s = FragmentSetupSimpleAdd(i);
