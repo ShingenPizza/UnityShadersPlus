@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_PARTICLE_SHADOW_INCLUDED
 #define UNITY_STANDARD_PARTICLE_SHADOW_INCLUDED
 
@@ -15,6 +17,8 @@
 #include "UnityStandardConfig.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityStandardParticleInstancing.cginc"
+
+#include "PlusStuff.cginc"
 
 #if (defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON)) && defined(UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS)
     #define UNITY_STANDARD_USE_DITHER_MASK 1
@@ -142,6 +146,8 @@ half4 fragParticleShadowCaster (
 #endif
     ) : SV_Target
 {
+    check_visibility();
+
     #ifdef UNITY_STANDARD_USE_SHADOW_UVS
         half alpha = tex2D(_MainTex, i.texcoord).a;
         #ifdef _FLIPBOOK_BLENDING
