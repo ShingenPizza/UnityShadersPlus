@@ -1,11 +1,14 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 using System;
+using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditor
+namespace ShingenPizza.Shaders.UnityPlus
 {
-    internal class StandardShaderGUI : ShaderGUI
+    public class StandardShaderGUIPlus : ShaderGUIPlus
     {
         private enum WorkflowMode
         {
@@ -84,7 +87,7 @@ namespace UnityEditor
         MaterialProperty detailNormalMap = null;
         MaterialProperty uvSetSecondary = null;
 
-        MaterialEditor m_MaterialEditor;
+        // MaterialEditor m_MaterialEditor; // moved to ShaderGUIPlus
         WorkflowMode m_WorkflowMode = WorkflowMode.Specular;
 
         bool m_FirstTimeApply = true;
@@ -123,6 +126,8 @@ namespace UnityEditor
             detailNormalMapScale = FindProperty("_DetailNormalMapScale", props);
             detailNormalMap = FindProperty("_DetailNormalMap", props);
             uvSetSecondary = FindProperty("_UVSec", props);
+
+            FindPropertiesPlus(props);
         }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
@@ -199,6 +204,10 @@ namespace UnityEditor
 
             m_MaterialEditor.EnableInstancingField();
             m_MaterialEditor.DoubleSidedGIField();
+
+            // My stuff
+            EditorGUILayout.Space();
+            PlusOptions();
         }
 
         internal void DetermineWorkflow(MaterialProperty[] props)
@@ -450,4 +459,4 @@ namespace UnityEditor
                 m.DisableKeyword(keyword);
         }
     }
-} // namespace UnityEditor
+} // namespace ShingenPizza.Shaders.UnityPlus

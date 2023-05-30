@@ -5,14 +5,28 @@
 // - no lightmap support
 // - no texture
 
-Shader "Unlit/Color" {
+// Unity's Unlit Color shader edited by ShingenPizza. More info in README.txt .
+
+Shader "ShingenPizza/Unlit Color Plus" {
 Properties {
     _Color ("Main Color", Color) = (1,1,1,1)
+
+    [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
+    [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
+    [ToggleOff] _VRC_Visible_VRCLens("Visible To VRCLens", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Screenshot("Visible On Screenshots", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Mirror("Visible In Mirrors", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Mirror_Camera("Visible In Mirrors To Cameras", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
+    [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
+    [HideInInspector] _Cull("__cull", Float) = 2.0
 }
 
 SubShader {
     Tags { "RenderType"="Opaque" }
     LOD 100
+    Cull [_Cull]
 
     Pass {
         CGPROGRAM
@@ -22,6 +36,7 @@ SubShader {
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+            #include "CGIncludes/PlusStuff.cginc"
 
             struct appdata_t {
                 float4 vertex : POSITION;
@@ -48,6 +63,8 @@ SubShader {
 
             fixed4 frag (v2f i) : SV_Target
             {
+                check_visibility();
+
                 fixed4 col = _Color;
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 UNITY_OPAQUE_ALPHA(col.a);
@@ -57,4 +74,6 @@ SubShader {
     }
 }
 
+Fallback "Unlit/Color"
+CustomEditor "ShingenPizza.Shaders.UnityPlus.StandardUnlitShaderGUIPlus"
 }

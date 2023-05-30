@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_CORE_INCLUDED
 #define UNITY_STANDARD_CORE_INCLUDED
 
@@ -13,6 +15,9 @@
 #include "UnityStandardBRDF.cginc"
 
 #include "AutoLight.cginc"
+
+#include "PlusStuff.cginc"
+
 //-------------------------------------------------------------------------------------
 // counterpart for NormalizePerPixelNormal
 // skips normalization per-vertex and expects normalization to happen per-pixel
@@ -427,6 +432,8 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
 
 half4 fragForwardBaseInternal (VertexOutputForwardBase i)
 {
+    check_visibility();
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FRAGMENT_SETUP(s)
@@ -521,6 +528,8 @@ VertexOutputForwardAdd vertForwardAdd (VertexInput v)
 
 half4 fragForwardAddInternal (VertexOutputForwardAdd i)
 {
+    check_visibility();
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
@@ -631,6 +640,8 @@ void fragDeferred (
 #endif
 )
 {
+    check_visibility();
+
     #if (SHADER_TARGET < 30)
         outGBuffer0 = 1;
         outGBuffer1 = 1;

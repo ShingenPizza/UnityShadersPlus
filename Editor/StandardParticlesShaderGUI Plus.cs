@@ -1,13 +1,16 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
-namespace UnityEditor
+namespace ShingenPizza.Shaders.UnityPlus
 {
-    internal class StandardParticlesShaderGUI : ShaderGUI
+    public class StandardParticlesShaderGUIPlus : ShaderGUIPlus
     {
         public enum BlendMode
         {
@@ -92,7 +95,7 @@ namespace UnityEditor
         MaterialProperty blendMode = null;
         MaterialProperty colorMode = null;
         MaterialProperty flipbookMode = null;
-        MaterialProperty cullMode = null;
+        // MaterialProperty cullMode = null; // moved to ShaderGUIPlus
         MaterialProperty distortionEnabled = null;
         MaterialProperty distortionStrength = null;
         MaterialProperty distortionBlend = null;
@@ -114,7 +117,7 @@ namespace UnityEditor
         MaterialProperty cameraNearFadeDistance = null;
         MaterialProperty cameraFarFadeDistance = null;
 
-        MaterialEditor m_MaterialEditor;
+        // MaterialEditor m_MaterialEditor; // moved to ShaderGUIPlus
 
         List<ParticleSystemRenderer> m_RenderersUsingThisMaterial = new List<ParticleSystemRenderer>();
 
@@ -146,6 +149,8 @@ namespace UnityEditor
             softParticlesFarFadeDistance = FindProperty("_SoftParticlesFarFadeDistance", props);
             cameraNearFadeDistance = FindProperty("_CameraNearFadeDistance", props);
             cameraFarFadeDistance = FindProperty("_CameraFarFadeDistance", props);
+
+            FindPropertiesPlusVisibility(props);
         }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
@@ -214,6 +219,11 @@ namespace UnityEditor
 
             GUILayout.Label(Styles.requiredVertexStreamsText, EditorStyles.boldLabel);
             DoVertexStreamsArea(material);
+
+            // My stuff
+            EditorGUILayout.Space();
+            GUILayout.Label("Plus Options", EditorStyles.largeLabel);
+            VisibilityOptions();
         }
 
         public override void OnClosed(Material material)
@@ -808,4 +818,4 @@ namespace UnityEditor
                 m.DisableKeyword(keyword);
         }
     }
-} // namespace UnityEditor
+} // namespace ShingenPizza.Shaders.UnityPlus

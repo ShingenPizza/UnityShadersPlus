@@ -1,6 +1,8 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Particles/Standard Unlit"
+// Unity's Particle Standard Unlit shader edited by ShingenPizza. More info in README.txt .
+
+Shader "ShingenPizza/Particle Standard Unlit Plus"
 {
     Properties
     {
@@ -22,6 +24,16 @@ Shader "Particles/Standard Unlit"
         _SoftParticlesFarFadeDistance("Soft Particles Far Fade", Float) = 1.0
         _CameraNearFadeDistance("Camera Near Fade", Float) = 1.0
         _CameraFarFadeDistance("Camera Far Fade", Float) = 2.0
+
+        [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
+        [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
+        [ToggleOff] _VRC_Visible_VRCLens("Visible To VRCLens", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Screenshot("Visible On Screenshots", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror("Visible In Mirrors", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_Camera("Visible In Mirrors To Cameras", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
 
         // Hidden properties
         [HideInInspector] _Mode ("__mode", Float) = 0.0
@@ -84,7 +96,7 @@ Shader "Particles/Standard Unlit"
                 #pragma vertex vertParticleShadowCaster
                 #pragma fragment fragParticleShadowCaster
 
-                #include "UnityStandardParticleShadow.cginc"
+                #include "CGIncludes/UnityStandardParticleShadow Plus.cginc"
                 ENDCG
             }
 
@@ -109,7 +121,7 @@ Shader "Particles/Standard Unlit"
                 #pragma vertex vertEditorPass
                 #pragma fragment fragSceneHighlightPass
 
-                #include "UnityStandardParticleEditor.cginc"
+                #include "CGIncludes/UnityStandardParticleEditor Plus.cginc"
                 ENDCG
             }
 
@@ -134,7 +146,7 @@ Shader "Particles/Standard Unlit"
                 #pragma vertex vertEditorPass
                 #pragma fragment fragScenePickingPass
 
-                #include "UnityStandardParticleEditor.cginc"
+                #include "CGIncludes/UnityStandardParticleEditor Plus.cginc"
                 ENDCG
             }
 
@@ -160,12 +172,12 @@ Shader "Particles/Standard Unlit"
                 #pragma multi_compile_instancing
                 #pragma instancing_options procedural:vertInstancingSetup
 
-                #include "UnityStandardParticles.cginc"
+                #include "CGIncludes/UnityStandardParticles Plus.cginc"
                 ENDCG
             }
         }
     }
 
-    Fallback "VertexLit"
-    CustomEditor "StandardParticlesShaderGUI"
+    Fallback "Particles/Standard Unlit"
+    CustomEditor "ShingenPizza.Shaders.UnityPlus.StandardParticlesShaderGUIPlus"
 }

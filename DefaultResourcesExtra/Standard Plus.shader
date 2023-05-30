@@ -1,6 +1,8 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Standard"
+// Unity's Standard shader edited by ShingenPizza. More info in README.txt .
+
+Shader "ShingenPizza/Standard Plus"
 {
     Properties
     {
@@ -39,6 +41,16 @@ Shader "Standard"
 
         [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
 
+        [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
+        [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
+        [ToggleOff] _VRC_Visible_VRCLens("Visible To VRCLens", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Screenshot("Visible On Screenshots", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror("Visible In Mirrors", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_Camera("Visible In Mirrors To Cameras", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
+        [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
+        [HideInInspector] _Cull("__cull", Float) = 2.0
 
         // Blending state
         [HideInInspector] _Mode ("__mode", Float) = 0.0
@@ -55,6 +67,7 @@ Shader "Standard"
     {
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 300
+        Cull[_Cull]
 
 
         // ------------------------------------------------------------------
@@ -90,7 +103,7 @@ Shader "Standard"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "UnityStandardCoreForward.cginc"
+            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
 
             ENDCG
         }
@@ -126,7 +139,7 @@ Shader "Standard"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "UnityStandardCoreForward.cginc"
+            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
 
             ENDCG
         }
@@ -156,7 +169,7 @@ Shader "Standard"
             #pragma vertex vertShadowCaster
             #pragma fragment fragShadowCaster
 
-            #include "UnityStandardShadow.cginc"
+            #include "CGIncludes/UnityStandardShadow Plus.cginc"
 
             ENDCG
         }
@@ -191,7 +204,7 @@ Shader "Standard"
             #pragma vertex vertDeferred
             #pragma fragment fragDeferred
 
-            #include "UnityStandardCore.cginc"
+            #include "CGIncludes/UnityStandardCore Plus.cginc"
 
             ENDCG
         }
@@ -216,7 +229,7 @@ Shader "Standard"
             #pragma shader_feature_local _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
-            #include "UnityStandardMeta.cginc"
+            #include "CGIncludes/UnityStandardMeta Plus.cginc"
             ENDCG
         }
     }
@@ -256,7 +269,7 @@ Shader "Standard"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "UnityStandardCoreForward.cginc"
+            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
 
             ENDCG
         }
@@ -288,7 +301,7 @@ Shader "Standard"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "UnityStandardCoreForward.cginc"
+            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
 
             ENDCG
         }
@@ -312,7 +325,7 @@ Shader "Standard"
             #pragma vertex vertShadowCaster
             #pragma fragment fragShadowCaster
 
-            #include "UnityStandardShadow.cginc"
+            #include "CGIncludes/UnityStandardShadow Plus.cginc"
 
             ENDCG
         }
@@ -337,12 +350,12 @@ Shader "Standard"
             #pragma shader_feature_local _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
-            #include "UnityStandardMeta.cginc"
+            #include "CGIncludes/UnityStandardMeta Plus.cginc"
             ENDCG
         }
     }
 
 
-    FallBack "VertexLit"
-    CustomEditor "StandardShaderGUI"
+    FallBack "Standard"
+    CustomEditor "ShingenPizza.Shaders.UnityPlus.StandardShaderGUIPlus"
 }

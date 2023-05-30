@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_PARTICLE_EDITOR_INCLUDED
 #define UNITY_STANDARD_PARTICLE_EDITOR_INCLUDED
 
@@ -12,6 +14,8 @@
 #include "UnityStandardConfig.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityStandardParticleInstancing.cginc"
+
+#include "PlusStuff.cginc"
 
 #ifdef _ALPHATEST_ON
 half        _Cutoff;
@@ -88,12 +92,16 @@ void fragSceneClip(VertexOutput i)
 
 half4 fragSceneHighlightPass(VertexOutput i) : SV_Target
 {
+    check_visibility();
+
     fragSceneClip(i);
     return float4(_ObjectId, _PassValue, 1, 1);
 }
 
 half4 fragScenePickingPass(VertexOutput i) : SV_Target
 {
+    check_visibility();
+
     fragSceneClip(i);
     return _SelectionID;
 }
