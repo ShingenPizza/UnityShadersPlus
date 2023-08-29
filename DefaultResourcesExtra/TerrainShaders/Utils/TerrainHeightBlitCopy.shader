@@ -7,7 +7,8 @@ Shader "Hidden/TerrainEngine/HeightBlitCopy" {
     }
     SubShader {
         Pass {
-            ZTest Always Cull Off ZWrite Off
+            // ZTest and ZWrite On to support extended edge sampling in PaintContext
+            ZTest LEqual Cull Off ZWrite On
 
             CGPROGRAM
             #pragma vertex vert

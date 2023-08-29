@@ -26,6 +26,7 @@ Shader "Hidden/GIDebug/TextureUV" {
             float _ConvertToLinearSpace;
             float _StaticUV1;
             float _Exposure;
+            float _HighlightAlpha;
 
             v2f_surf vert_surf (appdata_full v)
             {
@@ -40,7 +41,7 @@ Shader "Hidden/GIDebug/TextureUV" {
                 return o;
             }
 
-            float4 frag_surf (v2f_surf IN) : COLOR
+            float4 frag_surf (v2f_surf IN) : SV_Target
             {
                 float4 mainTexSampled = tex2D (_MainTex, IN.uv.xy);
                 float3 result;
@@ -52,6 +53,10 @@ Shader "Hidden/GIDebug/TextureUV" {
 
                 if (_ConvertToLinearSpace)
                     result = LinearToGammaSpace (result);
+
+                // currently used to highlight the alpha channel when viewing shadowmask textures
+                if (_HighlightAlpha)
+                    result.rgb += (mainTexSampled.a * 0.5);
 
                 return float4 (result * exp2(_Exposure), 1);
             }

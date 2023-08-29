@@ -12,6 +12,7 @@ Shader "Nature/Terrain/Standard" {
         Tags {
             "Queue" = "Geometry-100"
             "RenderType" = "Opaque"
+            "TerrainCompatible" = "True"
         }
 
         CGPROGRAM
@@ -21,7 +22,7 @@ Shader "Nature/Terrain/Standard" {
         #pragma target 3.0
         #include "UnityPBSLighting.cginc"
 
-        #pragma multi_compile_local __ _ALPHATEST_ON
+        #pragma multi_compile_local_fragment __ _ALPHATEST_ON
         #pragma multi_compile_local __ _NORMALMAP
 
         #define TERRAIN_STANDARD_SHADER

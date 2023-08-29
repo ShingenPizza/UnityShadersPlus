@@ -5,7 +5,7 @@ Shader "Hidden/TerrainEngine/Splatmap/Diffuse-AddPass" {
         [HideInInspector] _TerrainHolesTexture("Holes Map (RGB)", 2D) = "white" {}
     }
     CGINCLUDE
-        #pragma surface surf Lambert decal:add vertex:SplatmapVert finalcolor:SplatmapFinalColor finalprepass:SplatmapFinalPrepass finalgbuffer:SplatmapFinalGBuffer fullforwardshadows nometa
+        #pragma surface surf Lambert decal:add vertex:SplatmapVert finalcolor:SplatmapFinalColor finalgbuffer:SplatmapFinalGBuffer fullforwardshadows nometa
         #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
         #pragma multi_compile_fog
 
@@ -34,7 +34,7 @@ Shader "Hidden/TerrainEngine/Splatmap/Diffuse-AddPass" {
         SubShader { // for sm3.0+ targets
             CGPROGRAM
                 #pragma target 3.0
-                #pragma multi_compile_local __ _ALPHATEST_ON
+                #pragma multi_compile_local_fragment __ _ALPHATEST_ON
                 #pragma multi_compile_local __ _NORMALMAP
             ENDCG
         }
