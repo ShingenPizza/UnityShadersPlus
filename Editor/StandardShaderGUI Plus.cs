@@ -309,7 +309,14 @@ namespace ShingenPizza.Shaders.UnityPlus
 
                 if (material.globalIlluminationFlags.HasFlag(MaterialGlobalIlluminationFlags.EmissiveIsBlack))
                 {
-                    material.GetPropertyState(MaterialSerializedProperty.LightmapFlags, out _, out _, out bool lockedByAncestor);
+                    System.Type MSP = System.Reflection.Assembly.Load("UnityEngine").GetType("UnityEngine.MaterialSerializedProperty");
+                    System.Type refbool = typeof(bool).MakeByRefType();
+                    if (MSP == null) { Debug.LogError($"{LOG_INFO} MaterialSerializedProperty enum wasn't found in the UnityEngine assembly via reflection! Please report it so I can take a look at it."); }
+                    System.Reflection.MethodInfo GPS = material.GetType().GetMethod("GetPropertyState", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance, null, System.Reflection.CallingConventions.Any, new[] { MSP, refbool, refbool, refbool }, null);
+                    if (GPS == null) { Debug.LogError($"{LOG_INFO} GetPropertyState method wasn't found in the material via reflection! Please report it so I can take a look at it."); }
+                    object[] args = { MSP?.GetField("LightmapFlags").GetValue(null), false, false, false };
+                    GPS?.Invoke(material, args);
+                    bool lockedByAncestor = (bool)args[3]; // instead of out bool lockedByAncestor
                     if (lockedByAncestor)
                         EditorGUILayout.HelpBox("Emissive lighting is locked to black by a parent Material. Changing the emissive color will have no effect.", MessageType.Warning);
                 }
