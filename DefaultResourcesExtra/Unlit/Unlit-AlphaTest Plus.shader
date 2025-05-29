@@ -24,7 +24,7 @@ Properties {
     [HideInInspector] _Cull("__cull", Float) = 2.0
 }
 SubShader {
-    Tags {"Queue"="AlphaTest" "IgnoreProjector"="True" "RenderType"="TransparentCutout"}
+    Tags {"Queue"="AlphaTest" "IgnoreProjector"="True" "RenderType"="TransparentCutout" "VRCFallback"="Unlit/Transparent Cutout"}
     LOD 100
     Cull [_Cull]
 

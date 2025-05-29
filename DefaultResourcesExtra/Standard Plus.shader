@@ -70,7 +70,7 @@ Shader "ShingenPizza/Standard Plus"
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "VRCFallback"="Standard" }
         LOD 300
         Cull[_Cull]
 
