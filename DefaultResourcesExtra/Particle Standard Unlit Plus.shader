@@ -59,7 +59,7 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
     {
         SubShader
         {
-            Tags { "RenderType"="Opaque" "IgnoreProjector"="True" "PreviewType"="Plane" "PerformanceChecks"="False" }
+            Tags { "RenderType"="Opaque" "IgnoreProjector"="True" "PreviewType"="Plane" "PerformanceChecks"="False" "VRCFallback"="Particles/Standard Unlit" }
 
             BlendOp [_BlendOp]
             Blend [_SrcBlend] [_DstBlend]
