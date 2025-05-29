@@ -1,13 +1,15 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_PBS_LIGHTING_INCLUDED
 #define UNITY_PBS_LIGHTING_INCLUDED
 
 #include "UnityShaderVariables.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityLightingCommon.cginc"
+#include "UnityLightingCommon Plus.cginc"
 #include "UnityGBuffer.cginc"
-#include "UnityGlobalIllumination.cginc"
+#include "UnityGlobalIllumination Plus.cginc"
 
 //-------------------------------------------------------------------------------------
 // Default BRDF to use:

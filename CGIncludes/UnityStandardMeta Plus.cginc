@@ -9,7 +9,7 @@
 // (extracts albedo/emission for lightmapper etc.)
 
 #include "UnityCG.cginc"
-#include "UnityStandardInput.cginc"
+#include "UnityStandardInput Plus.cginc"
 #include "UnityMetaPass.cginc"
 #include "UnityStandardCore Plus.cginc"
 
