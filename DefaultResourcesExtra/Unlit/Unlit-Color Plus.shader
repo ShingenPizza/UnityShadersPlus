@@ -24,7 +24,7 @@ Properties {
 }
 
 SubShader {
-    Tags { "RenderType"="Opaque" }
+    Tags { "RenderType"="Opaque" "VRCFallback"="Unlit/Color" }
     LOD 100
     Cull [_Cull]
 

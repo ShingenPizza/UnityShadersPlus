@@ -24,7 +24,7 @@ Properties {
 }
 
 SubShader {
-    Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+    Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "VRCFallback"="Unlit/Transparent"}
     LOD 100
     Cull [_Cull]
 

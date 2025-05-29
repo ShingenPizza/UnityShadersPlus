@@ -24,7 +24,7 @@ Properties {
 }
 
 SubShader {
-    Tags { "RenderType"="Opaque" }
+    Tags { "RenderType"="Opaque" "VRCFallback"="Unlit/Texture" }
     LOD 100
     Cull [_Cull]
 
@@ -78,6 +78,6 @@ SubShader {
     }
 }
 
-Fallback "Unlit/Color"
+Fallback "Unlit/Texture"
 CustomEditor "ShingenPizza.Shaders.UnityPlus.StandardUnlitShaderGUIPlus"
 }
