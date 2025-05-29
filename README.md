@@ -17,14 +17,12 @@ Please use the [Releases](https://github.com/ShingenPizza/UnityShadersPlus/relea
 ### Edited shaders
 - Standard
 - Standard (Specular setup)
-- Particle Standard Surface\*
+- Particle Standard Surface
 - Particle Standard Unlit
 - Unlit Color
 - Unlit Texture
 - Unlit Transparent
 - Unlit Transparent Cutout
-
-\* See "Known issues" section below.
 
 
 ### Features
@@ -62,7 +60,6 @@ Voilà!<br>
 
 
 ### Known issues:
-- The Particle Standard Surface Plus's Limited Visibility options pretty much don't work for an unknown to me reason.
 - The Two Sided option doesn't work when toggled in VRChat - it needs to be set before upload.
 - Since I had to create a custom editor for Unlit shaders, the Inspector view doesn't look exactly the way the default one does. (The shaders themselves work just fine, though.)
 

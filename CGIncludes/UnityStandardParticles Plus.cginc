@@ -290,6 +290,8 @@ void vert (inout appdata_particles v, out Input o)
 
 void surf (Input IN, inout SurfaceOutputStandard o)
 {
+    check_visibility();
+
     half4 albedo = readTexture (_MainTex, IN);
     albedo *= _Color;
 
