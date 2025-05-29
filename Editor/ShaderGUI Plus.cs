@@ -22,6 +22,10 @@ namespace ShingenPizza.Shaders.UnityPlus
         MaterialProperty limited_visibility;
         readonly MaterialProperty[] visibility_values = new MaterialProperty[visibility_columns.Length * visibility_rows.Length];
 
+        MaterialProperty light_volumes_on;
+        MaterialProperty light_volumes_speculars;
+        MaterialProperty light_volumes_dominant_speculars;
+
         protected MaterialProperty cullMode;
 
         protected MaterialEditor m_MaterialEditor;
@@ -29,6 +33,7 @@ namespace ShingenPizza.Shaders.UnityPlus
         protected void FindPropertiesPlus(MaterialProperty[] props)
         {
             FindPropertiesPlusVisibility(props);
+            FindPropertiesPlusLightVolumes(props);
             FindPropertiesPlusCull(props);
         }
 
@@ -45,15 +50,23 @@ namespace ShingenPizza.Shaders.UnityPlus
             visibility_values[7] = FindProperty("_VRC_Visible_Mirror_Screenshot", props);
         }
 
+        protected void FindPropertiesPlusLightVolumes(MaterialProperty[] props)
+        {
+            light_volumes_on = FindProperty("_LightVolumes", props);
+            light_volumes_speculars = FindProperty("_Speculars", props);
+            light_volumes_dominant_speculars = FindProperty("_DominantDirSpeculars", props);
+        }
+
         public void FindPropertiesPlusCull(MaterialProperty[] props)
         {
             cullMode = FindProperty("_Cull", props);
         }
         
-        protected void PlusOptions()
+        protected void PlusOptions(Material material)
         {
             GUILayout.Label("Plus Options", EditorStyles.largeLabel);
             VisibilityOptions();
+            LightVolumesOptions(material);
             OtherOptions();
         }
 
@@ -110,6 +123,47 @@ namespace ShingenPizza.Shaders.UnityPlus
             GUILayout.EndVertical();
         }
 
+        protected void LightVolumesOptions(Material material)
+        {
+            GUILayout.Label("Light Volumes", EditorStyles.boldLabel);
+
+            EditorGUI.showMixedValue = light_volumes_on.hasMixedValue;
+            bool tmp_lv = light_volumes_on.floatValue != 0f;
+            EditorGUI.BeginChangeCheck();
+            tmp_lv = EditorGUILayout.Toggle(EditorGUIUtility.TrTextContent("Enable Light Volumes", "Disable to never use LV. If enabled, it will still fall back to Light Probes if there are no LV in the world."), tmp_lv);
+            if (EditorGUI.EndChangeCheck())
+            {
+                light_volumes_on.floatValue = tmp_lv ? 1f : 0f;
+                SetKeyword(material, "_LIGHTVOLUMES_ON", tmp_lv);
+            }
+            EditorGUI.showMixedValue = false;
+
+            bool light_volumes_speculars_mixed_values = light_volumes_speculars.hasMixedValue;
+            EditorGUI.showMixedValue = light_volumes_speculars_mixed_values;
+            bool tmp_lv_s = light_volumes_speculars.floatValue != 0f;
+            EditorGUI.BeginChangeCheck();
+            tmp_lv_s = EditorGUILayout.Toggle(EditorGUIUtility.TrTextContent("Speculars", "Specular LV reflections - independent from the \"Enable Light Volumes\" setting, just like in the original example."), tmp_lv_s);
+            if (EditorGUI.EndChangeCheck())
+            {
+                light_volumes_speculars.floatValue = tmp_lv_s ? 1f : 0f;
+                SetKeyword(material, "_SPECULARS_ON", tmp_lv_s);
+            }
+            EditorGUI.showMixedValue = false;
+
+            if (!tmp_lv_s && !light_volumes_speculars_mixed_values) { return; }
+
+            EditorGUI.showMixedValue = light_volumes_dominant_speculars.hasMixedValue;
+            bool tmp_lv_s_d = light_volumes_dominant_speculars.floatValue != 0f;
+            EditorGUI.BeginChangeCheck();
+            tmp_lv_s_d = EditorGUILayout.Toggle(EditorGUIUtility.TrTextContent("Dominant Dir Speculars", "To quote LV docs: \"Better for hard surface PBR shaders.\""), tmp_lv_s_d);
+            if (EditorGUI.EndChangeCheck())
+            {
+                light_volumes_dominant_speculars.floatValue = tmp_lv_s_d ? 1f : 0f;
+                SetKeyword(material, "_DOMINANTDIRSPECULARS_ON", tmp_lv_s_d);
+            }
+            EditorGUI.showMixedValue = false;
+        }
+
         protected void OtherOptions()
         {
             GUILayout.Label("Other Options", EditorStyles.boldLabel);
@@ -133,6 +187,14 @@ namespace ShingenPizza.Shaders.UnityPlus
             }
 
             EditorGUI.showMixedValue = false;
+        }
+
+        protected static void SetKeyword(Material m, string keyword, bool state)
+        {
+            if (state)
+                m.EnableKeyword(keyword);
+            else
+                m.DisableKeyword(keyword);
         }
 
         # region Logging stuff

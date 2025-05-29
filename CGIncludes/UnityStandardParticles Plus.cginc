@@ -13,7 +13,7 @@
 #define _DISTORTION_ON 1
 #endif
 
-#include "UnityPBSLighting.cginc"
+#include "UnityPBSLighting Plus.cginc"
 #include "UnityStandardParticleInstancing.cginc"
 
 #include "PlusStuff.cginc"

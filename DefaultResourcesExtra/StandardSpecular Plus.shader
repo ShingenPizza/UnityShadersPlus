@@ -52,6 +52,11 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
         [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
         [HideInInspector] _Cull("__cull", Float) = 2.0
 
+        // Light Volumes
+		[Toggle(_LIGHTVOLUMES_ON)] _LightVolumes("Enable Light Volumes", Float) = 1
+		[Toggle(_SPECULARS_ON)] _Speculars("Speculars", Float) = 1
+		[Toggle(_DOMINANTDIRSPECULARS_ON)] _DominantDirSpeculars("Dominant Dir Speculars", Float) = 0
+
         // Blending state
         [HideInInspector] _Mode ("__mode", Float) = 0.0
         [HideInInspector] _SrcBlend ("__src", Float) = 1.0
@@ -94,6 +99,10 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
             #pragma shader_feature_local _GLOSSYREFLECTIONS_OFF
             #pragma shader_feature_local _PARALLAXMAP
+
+		    #pragma shader_feature_local _SPECULARS_ON
+		    #pragma shader_feature_local _LIGHTVOLUMES_ON
+		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
 
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog

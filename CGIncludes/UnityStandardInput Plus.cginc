@@ -1,11 +1,13 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_INPUT_INCLUDED
 #define UNITY_STANDARD_INPUT_INCLUDED
 
 #include "UnityCG.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityPBSLighting.cginc" // TBD: remove
+#include "UnityPBSLighting Plus.cginc" // TBD: remove
 #include "UnityStandardUtils.cginc"
 
 //---------------------------------------

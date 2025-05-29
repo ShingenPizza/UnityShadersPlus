@@ -1,11 +1,13 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_STANDARD_BRDF_INCLUDED
 #define UNITY_STANDARD_BRDF_INCLUDED
 
 #include "UnityCG.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityLightingCommon.cginc"
+#include "UnityLightingCommon Plus.cginc"
 
 //-----------------------------------------------------------------------------
 // Helper to convert smoothness to roughness

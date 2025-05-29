@@ -207,7 +207,7 @@ namespace ShingenPizza.Shaders.UnityPlus
 
             // My stuff
             EditorGUILayout.Space();
-            PlusOptions();
+            PlusOptions(material);
         }
 
         internal void DetermineWorkflow(MaterialProperty[] props)
@@ -449,14 +449,6 @@ namespace ShingenPizza.Shaders.UnityPlus
             SetupMaterialWithBlendMode(material, (BlendMode)material.GetFloat("_Mode"), overrideRenderQueue);
 
             SetMaterialKeywords(material, workflowMode);
-        }
-
-        static void SetKeyword(Material m, string keyword, bool state)
-        {
-            if (state)
-                m.EnableKeyword(keyword);
-            else
-                m.DisableKeyword(keyword);
         }
     }
 } // namespace ShingenPizza.Shaders.UnityPlus

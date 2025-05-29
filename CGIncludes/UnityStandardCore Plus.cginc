@@ -8,13 +8,15 @@
 #include "UnityCG.cginc"
 #include "UnityShaderVariables.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityStandardInput.cginc"
-#include "UnityPBSLighting.cginc"
+#include "UnityStandardInput Plus.cginc"
+#include "UnityPBSLighting Plus.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityGBuffer.cginc"
-#include "UnityStandardBRDF.cginc"
+#include "UnityStandardBRDF Plus.cginc"
 
 #include "AutoLight.cginc"
+
+#include "LightVolumes.cginc"
 
 #include "PlusStuff.cginc"
 
@@ -189,6 +191,10 @@ struct FragmentCommonData
 #if UNITY_STANDARD_SIMPLE
     half3 tangentSpaceNormal;
 #endif
+
+    // Data required for VRC Light Volumes
+    float3 albedo;
+    half metallic;
 };
 
 #ifndef UNITY_SETUP_BRDF_INPUT
@@ -202,13 +208,15 @@ inline FragmentCommonData SpecularSetup (float4 i_tex)
     half smoothness = specGloss.a;
 
     half oneMinusReflectivity;
-    half3 diffColor = EnergyConservationBetweenDiffuseAndSpecular (Albedo(i_tex), specColor, /*out*/ oneMinusReflectivity);
+    half3 albedo = Albedo(i_tex);
+    half3 diffColor = EnergyConservationBetweenDiffuseAndSpecular (albedo, specColor, /*out*/ oneMinusReflectivity);
 
     FragmentCommonData o = (FragmentCommonData)0;
     o.diffColor = diffColor;
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+    o.albedo = albedo;
     return o;
 }
 
@@ -238,13 +246,16 @@ inline FragmentCommonData MetallicSetup (float4 i_tex)
 
     half oneMinusReflectivity;
     half3 specColor;
-    half3 diffColor = DiffuseAndSpecularFromMetallic (Albedo(i_tex), metallic, /*out*/ specColor, /*out*/ oneMinusReflectivity);
+    half3 albedo = Albedo(i_tex);
+    half3 diffColor = DiffuseAndSpecularFromMetallic (albedo, metallic, /*out*/ specColor, /*out*/ oneMinusReflectivity);
 
     FragmentCommonData o = (FragmentCommonData)0;
     o.diffColor = diffColor;
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+    o.albedo = albedo;
+    o.metallic = metallic;
     return o;
 }
 
@@ -449,6 +460,18 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
 
     half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect);
     c.rgb += Emission(i.tex.xy);
+
+    #ifdef _SPECULARS_ON
+    if (!_UdonLightVolumeEnabled || _UdonLightVolumeCount == 0) {}
+    else
+    {
+        #ifdef _DOMINANTDIRSPECULARS_ON
+        c.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #else
+        c.rgb += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #endif
+    }
+    #endif
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
