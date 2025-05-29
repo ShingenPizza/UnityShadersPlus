@@ -14,7 +14,7 @@
 #endif
 
 #include "HLSLSupport.cginc"
-#include "UnityPBSLighting.cginc"
+#include "UnityPBSLighting Plus.cginc"
 #include "UnityStandardParticleInstancing.cginc"
 
 #include "PlusStuff.cginc"

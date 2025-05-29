@@ -1,5 +1,7 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_LIGHTING_COMMON_INCLUDED
 #define UNITY_LIGHTING_COMMON_INCLUDED
 
@@ -23,6 +25,12 @@ struct UnityGI
 {
     UnityLight light;
     UnityIndirect indirect;
+
+    // Data required for VRC Light Volumes
+    float3 L0;
+    float3 L1r;
+    float3 L1g;
+    float3 L1b;
 };
 
 struct UnityGIInput

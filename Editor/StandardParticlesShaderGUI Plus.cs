@@ -814,13 +814,5 @@ namespace ShingenPizza.Shaders.UnityPlus
                     m_RenderersUsingThisMaterial.Add(renderer);
             }
         }
-
-        static void SetKeyword(Material m, string keyword, bool state)
-        {
-            if (state)
-                m.EnableKeyword(keyword);
-            else
-                m.DisableKeyword(keyword);
-        }
     }
 } // namespace ShingenPizza.Shaders.UnityPlus

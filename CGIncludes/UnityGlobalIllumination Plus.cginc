@@ -1,13 +1,17 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_GLOBAL_ILLUMINATION_INCLUDED
 #define UNITY_GLOBAL_ILLUMINATION_INCLUDED
 
 // Functions sampling light environment data (lightmaps, light probes, reflection probes), which is then returned as the UnityGI struct.
 
-#include "UnityImageBasedLighting.cginc"
+#include "UnityImageBasedLighting Plus.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityShadowLibrary.cginc"
+
+#include "LightVolumes.cginc"
 
 inline half3 DecodeDirectionalSpecularLightmap (half3 color, half4 dirTex, half3 normalWorld, bool isRealtimeLightmap, fixed4 realtimeNormalTex, out UnityLight o_light)
 {
@@ -83,6 +87,10 @@ inline void ResetUnityGI(out UnityGI outGI)
     ResetUnityLight(outGI.light);
     outGI.indirect.diffuse = 0;
     outGI.indirect.specular = 0;
+    outGI.L0 = float3(0, 0, 0);
+    outGI.L1r = float3(0, 0, 0);
+    outGI.L1g = float3(0, 0, 0);
+    outGI.L1b = float3(0, 0, 0);
 }
 
 inline UnityGI UnityGI_Base(UnityGIInput data, half occlusion, half3 normalWorld)
@@ -102,7 +110,21 @@ inline UnityGI UnityGI_Base(UnityGIInput data, half occlusion, half3 normalWorld
     o_gi.light.color *= data.atten;
 
     #if UNITY_SHOULD_SAMPLE_SH
+    #if _LIGHTVOLUMES_ON || _SPECULARS_ON
+    if (!_UdonLightVolumeEnabled || _UdonLightVolumeCount == 0)  // explicit check, because LightVolumeSH()'s fallback does not fall back to this
+    {
+    #endif
         o_gi.indirect.diffuse = ShadeSHPerPixel(normalWorld, data.ambient, data.worldPos);
+    #if _LIGHTVOLUMES_ON || _SPECULARS_ON
+    }
+    else
+    {
+        LightVolumeSH(data.worldPos, o_gi.L0, o_gi.L1r, o_gi.L1g, o_gi.L1b);
+        #if _LIGHTVOLUMES_ON
+        o_gi.indirect.diffuse = LightVolumeEvaluate(normalWorld, o_gi.L0, o_gi.L1r, o_gi.L1g, o_gi.L1b);
+        #endif
+    }
+    #endif
     #endif
 
     #if defined(LIGHTMAP_ON)
@@ -127,6 +149,13 @@ inline UnityGI UnityGI_Base(UnityGIInput data, half occlusion, half3 normalWorld
                 o_gi.indirect.diffuse = SubtractMainLightWithRealtimeAttenuationFromLightmap(o_gi.indirect.diffuse, data.atten, bakedColorTex, normalWorld);
             #endif
 
+        #endif
+
+        #if _LIGHTVOLUMES_ON || _SPECULARS_ON
+        LightVolumeAdditiveSH(data.worldPos, o_gi.L0, o_gi.L1r, o_gi.L1g, o_gi.L1b);
+        #if _LIGHTVOLUMES_ON
+        o_gi.indirect.diffuse += LightVolumeEvaluate(normalWorld, o_gi.L0, o_gi.L1r, o_gi.L1g, o_gi.L1b);
+        #endif
         #endif
     #endif
 

@@ -29,6 +29,9 @@ Please use the [Releases](https://github.com/ShingenPizza/UnityShadersPlus/relea
 - **Limited Visibility**<br>
 <img src="https://github.com/user-attachments/assets/73ed7cc1-2a30-4c45-ba2a-e31ebf947a05" width="512" alt="presenting the Limited Visibility feature" /><br>
 toggles for visibility in VRChat when seen directly, in mirrors, on screenshots, and on cameras (separately the default VRChat one and Hirabiki's VRCLens).
+- [**VRC Light Volumes**](https://github.com/REDSIM/VRCLightVolumes)<br>
+<img src="https://github.com/user-attachments/assets/2cfe3af9-1d6c-470c-901a-218bae1a55cf" width="512" alt="presenting the VRC Light Volumes support" /><br>
+support for the cool new "voxel based light probes replacement".
 - **Two Sided**<br>
 turning off backface culling if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces\*.
 

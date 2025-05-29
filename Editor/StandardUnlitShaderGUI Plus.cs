@@ -50,7 +50,7 @@ namespace ShingenPizza.Shaders.UnityPlus
 
             // My stuff
             EditorGUILayout.Space();
-            PlusOptions();
+            PlusOptions(material);
         }
     }
 } // namespace ShingenPizza.Shaders.UnityPlus

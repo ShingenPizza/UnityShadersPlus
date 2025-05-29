@@ -7,6 +7,8 @@
 
 #include "UnityStandardCore Plus.cginc"
 
+#include "LightVolumes.cginc"
+
 //  Does not support: _PARALLAXMAP, DIRLIGHTMAP_COMBINED
 #define GLOSSMAP (defined(_SPECGLOSSMAP) || defined(_METALLICGLOSSMAP))
 
@@ -227,6 +229,18 @@ half4 fragForwardBaseSimpleInternal (VertexOutputBaseSimple i)
     half3 c = BRDF3_Indirect(s.diffColor, s.specColor, gi.indirect, PerVertexGrazingTerm(i, s), PerVertexFresnelTerm(i));
     c += BRDF3DirectSimple(s.diffColor, s.specColor, s.smoothness, rl) * attenuatedLightColor;
     c += Emission(i.tex.xy);
+
+    #ifdef _SPECULARS_ON
+    if (!_UdonLightVolumeEnabled || _UdonLightVolumeCount == 0) {}
+    else
+    {
+        #ifdef _DOMINANTDIRSPECULARS_ON
+        c.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #else
+        c.rgb += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #endif
+    }
+    #endif
 
     UNITY_APPLY_FOG(i.fogCoord, c);
 

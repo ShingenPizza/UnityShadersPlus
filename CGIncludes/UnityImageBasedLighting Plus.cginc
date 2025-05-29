@@ -1,11 +1,13 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
+// Modified by ShingenPizza. More info in README.txt .
+
 #ifndef UNITY_IMAGE_BASED_LIGHTING_INCLUDED
 #define UNITY_IMAGE_BASED_LIGHTING_INCLUDED
 
 #include "UnityCG.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityStandardBRDF.cginc"
+#include "UnityStandardBRDF Plus.cginc"
 
 // ----------------------------------------------------------------------------
 
