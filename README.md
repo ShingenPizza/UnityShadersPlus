@@ -38,6 +38,10 @@ turning off backface culling if you need a mesh to be visible from both sides, t
 \* Available in some built-in shaders, simply copied to the others. Also, see "Known issues" section below.
 
 
+### Example
+Check out this [example avatar](https://vrchat.com/home/avatar/avtr_5f4f7749-d344-400e-9e2a-e8feccc5abdc) using the Standard Plus shader.
+
+
 ### Compatibility
 They are available in packages based on built-in shaders of Unity versions:
 - 2019.4.40f1 (meant to be used in projects of Unity 2019.4.31f1, which actual shaders are broken)
