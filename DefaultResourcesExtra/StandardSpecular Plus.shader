@@ -244,8 +244,9 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "VRCFallback"="Standard (Specular setup)" }
         LOD 150
+        Cull[_Cull]
 
         // ------------------------------------------------------------------
         //  Base forward pass (directional light, emission, lightmaps, ...)
@@ -271,6 +272,10 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             // SM2.0: NOT SUPPORTED shader_feature_local _PARALLAXMAP
 
             #pragma skip_variants SHADOWS_SOFT DYNAMICLIGHTMAP_ON DIRLIGHTMAP_COMBINED
+
+		    #pragma shader_feature_local _SPECULARS_ON
+		    #pragma shader_feature_local _LIGHTVOLUMES_ON
+		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
 
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
