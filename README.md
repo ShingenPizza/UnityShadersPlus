@@ -71,6 +71,13 @@ Voilà!<br>
 - Since I had to create a custom editor for Unlit shaders, the Inspector view doesn't look exactly the way the default one does. (The shaders themselves work just fine, though.)
 
 
+### Contact
+- [Telegram: @ShingenPizza](https://t.me/ShingenPizza)
+- [Discord: @shingen](https://discord.com/users/107929823900360704) (no need to add me to friends, I may ignore random requests, just send me a dm straight away, they're open)
+- [Twitter/X: @ShingenPizza](https://x.com/ShingenPizza)
+- [Bsky: @shingenpizza.bsky.social](https://bsky.app/profile/shingenpizza.bsky.social)
+
+
 ### Requests
 If you'd like me to add a support for these features to other built-in shaders, feel free to create an [Issue](https://github.com/ShingenPizza/UnityShadersPlus/issues) or contact me through other means.
 
