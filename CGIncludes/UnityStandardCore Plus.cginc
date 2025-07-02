@@ -470,8 +470,7 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     c.rgb += Emission(i.tex.xy);
 
     #ifdef _SPECULARS_ON
-    if (!_UdonLightVolumeEnabled || _UdonLightVolumeCount == 0) {}
-    else
+    if (_UdonLightVolumeEnabled != 0)
     {
         #ifdef _DOMINANTDIRSPECULARS_ON
         c.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
