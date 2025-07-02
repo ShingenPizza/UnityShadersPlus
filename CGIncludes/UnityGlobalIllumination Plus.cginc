@@ -115,7 +115,7 @@ inline UnityGI UnityGI_Base(UnityGIInput data, half occlusion, half3 normalWorld
 
     #if UNITY_SHOULD_SAMPLE_SH
     #if _LIGHTVOLUMES_ON || _SPECULARS_ON
-    if (!_UdonLightVolumeEnabled || _UdonLightVolumeCount == 0)  // explicit check, because LightVolumeSH()'s fallback does not fall back to this
+    if (_UdonLightVolumeEnabled == 0)  // explicit check, because LightVolumeSH()'s fallback does not fall back to this
     {
     #endif
         o_gi.indirect.diffuse = ShadeSHPerPixel(normalWorld, data.ambient, data.worldPos);
