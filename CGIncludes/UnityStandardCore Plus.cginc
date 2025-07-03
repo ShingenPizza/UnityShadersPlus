@@ -192,9 +192,11 @@ struct FragmentCommonData
     half3 tangentSpaceNormal;
 #endif
 
-    // Data required for VRC Light Volumes
+#ifdef _SPECULARS_ON
+    // Plus - Fields required for VRC Light Volumes
     float3 albedo;
     half metallic;
+#endif
 };
 
 #ifndef UNITY_SETUP_BRDF_INPUT
@@ -216,7 +218,10 @@ inline FragmentCommonData SpecularSetup (float4 i_tex)
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+#ifdef _SPECULARS_ON
+    // Plus - Data required for VRC Light Volumes
     o.albedo = albedo;
+#endif
     return o;
 }
 
@@ -254,8 +259,11 @@ inline FragmentCommonData MetallicSetup (float4 i_tex)
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+#ifdef _SPECULARS_ON
+    // Plus - Data required for VRC Light Volumes
     o.albedo = albedo;
     o.metallic = metallic;
+#endif
     return o;
 }
 
