@@ -41,6 +41,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
         [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
 
+		// Plus - Limited Visibility
         [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
         [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
         [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
@@ -50,9 +51,11 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
         [ToggleOff] _VRC_Visible_Mirror_Camera("Visible In Mirrors To Cameras", Float) = 1.0
         [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
         [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
+
+		// Plus - Culling
         [HideInInspector] _Cull("__cull", Float) = 2.0
 
-        // Light Volumes
+        // Plus - VRC Light Volumes
 		[Toggle(_LIGHTVOLUMES_ON)] _LightVolumes("Enable Light Volumes", Float) = 1
 		[Toggle(_SPECULARS_ON)] _Speculars("Speculars", Float) = 1
 		[Toggle(_DOMINANTDIRSPECULARS_ON)] _DominantDirSpeculars("Dominant Dir Speculars", Float) = 0
@@ -72,6 +75,8 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
     {
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "VRCFallback"="Standard (Specular setup)" }
         LOD 300
+
+		// Plus - Culling
         Cull[_Cull]
 
 
@@ -100,6 +105,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
             #pragma shader_feature_local _PARALLAXMAP
 
+            // Plus - VRC Light Volumes
 		    #pragma shader_feature_local _SPECULARS_ON
 		    #pragma shader_feature_local _LIGHTVOLUMES_ON
 		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
@@ -246,6 +252,8 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
     {
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "VRCFallback"="Standard (Specular setup)" }
         LOD 150
+
+		// Plus - Culling
         Cull[_Cull]
 
         // ------------------------------------------------------------------
@@ -273,6 +281,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
             #pragma skip_variants SHADOWS_SOFT DYNAMICLIGHTMAP_ON DIRLIGHTMAP_COMBINED
 
+        	// Plus - VRC Light Volumes
 		    #pragma shader_feature_local _SPECULARS_ON
 		    #pragma shader_feature_local _LIGHTVOLUMES_ON
 		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON

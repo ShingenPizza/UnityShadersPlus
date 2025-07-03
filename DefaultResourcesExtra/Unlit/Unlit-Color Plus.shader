@@ -11,6 +11,7 @@ Shader "ShingenPizza/Unlit Color Plus" {
 Properties {
     _Color ("Main Color", Color) = (1,1,1,1)
 
+	// Plus - Limited Visibility
     [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
     [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
     [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
@@ -20,12 +21,16 @@ Properties {
     [ToggleOff] _VRC_Visible_Mirror_Camera("Visible In Mirrors To Cameras", Float) = 1.0
     [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
     [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
+
+	// Plus - Culling
     [HideInInspector] _Cull("__cull", Float) = 2.0
 }
 
 SubShader {
     Tags { "RenderType"="Opaque" "VRCFallback"="Unlit/Color" }
     LOD 100
+
+	// Plus - Culling
     Cull [_Cull]
 
     Pass {

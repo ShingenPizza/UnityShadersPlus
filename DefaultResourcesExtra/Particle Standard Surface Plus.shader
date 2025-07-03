@@ -29,6 +29,7 @@ Shader "ShingenPizza/Particle Standard Surface Plus"
         _CameraNearFadeDistance("Camera Near Fade", Float) = 1.0
         _CameraFarFadeDistance("Camera Far Fade", Float) = 2.0
 
+	    // Plus - Limited Visibility
         [Toggle] _VRC_Limited_Visibility("Limited Visibility", Float) = 0.0
         [ToggleOff] _VRC_Visible_Normal("Visible Normally", Float) = 1.0
         [ToggleOff] _VRC_Visible_Camera("Visible To Cameras", Float) = 1.0
