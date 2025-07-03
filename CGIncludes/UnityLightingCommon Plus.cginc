@@ -26,11 +26,13 @@ struct UnityGI
     UnityLight light;
     UnityIndirect indirect;
 
-    // Data required for VRC Light Volumes
+#if _LIGHTVOLUMES_ON || _SPECULARS_ON
+    // Plus - Fields required for VRC Light Volumes
     float3 L0;
     float3 L1r;
     float3 L1g;
     float3 L1b;
+#endif
 };
 
 struct UnityGIInput

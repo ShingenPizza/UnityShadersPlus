@@ -87,10 +87,14 @@ inline void ResetUnityGI(out UnityGI outGI)
     ResetUnityLight(outGI.light);
     outGI.indirect.diffuse = 0;
     outGI.indirect.specular = 0;
+
+#if _LIGHTVOLUMES_ON || _SPECULARS_ON
+    // Plus - Data required for VRC Light Volumes
     outGI.L0 = float3(0, 0, 0);
     outGI.L1r = float3(0, 0, 0);
     outGI.L1g = float3(0, 0, 0);
     outGI.L1b = float3(0, 0, 0);
+#endif
 }
 
 inline UnityGI UnityGI_Base(UnityGIInput data, half occlusion, half3 normalWorld)
