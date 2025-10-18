@@ -467,6 +467,12 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, mainLight);
 
     half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect);
+
+#ifndef _ALPHAPREMULTIPLY_ON
+    // Plus - Minimum Brightness
+    c.rgb = max(c.rgb / s.diffColor, _LightingMinLightBrightness) * s.diffColor;
+#endif
+
     c.rgb += Emission(i.tex.xy);
 
     #ifdef _SPECULARS_ON
@@ -703,6 +709,11 @@ void fragDeferred (
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
 
     half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect).rgb;
+
+#ifndef _ALPHAPREMULTIPLY_ON
+    // Plus - Minimum Brightness
+    emissiveColor.rgb = max(emissiveColor.rgb / s.diffColor, _LightingMinLightBrightness) * s.diffColor;
+#endif
 
     #ifdef _EMISSION
         emissiveColor += Emission (i.tex.xy);

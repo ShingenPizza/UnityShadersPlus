@@ -52,6 +52,9 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
         [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
         [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
 
+		// Plus - Minimum Brightness
+        _LightingMinLightBrightness("Minimum Brightness", Range(0.0, 1.0)) = 0.0
+
 		// Plus - Culling
         [HideInInspector] _Cull("__cull", Float) = 2.0
 

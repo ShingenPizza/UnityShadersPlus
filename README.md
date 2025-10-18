@@ -32,10 +32,13 @@ toggles for visibility in VRChat when seen directly, in mirrors, on screenshots,
 - [**VRC Light Volumes**](https://github.com/REDSIM/VRCLightVolumes)<br>
 <img src="https://github.com/user-attachments/assets/2cfe3af9-1d6c-470c-901a-218bae1a55cf" width="512" alt="presenting the VRC Light Volumes support" /><br>
 support for the cool new "voxel based light probes replacement" (v2.1).
+- **Minimum Brightness**<br>
+support for the "Minimum Brightness" property, allowing you to remain visible in darker areas of VRC worlds \[a\].
 - **Two Sided**<br>
-turning off backface culling if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces\*.
+turning off backface culling if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces \[a\]\[b\].
 
-\* Available in some built-in shaders, simply copied to the others. Also, see "Known issues" section below.
+\[a\] See the "Known issues" section below.<br>
+\[b\] Available in some built-in shaders, simply copied to the others.<br>
 
 
 ### Example
@@ -69,6 +72,7 @@ Voilà!<br>
 ### Known issues:
 - The Two Sided option doesn't work when toggled in VRChat - it needs to be set before upload.
 - Since I had to create a custom editor for Unlit shaders, the Inspector view doesn't look exactly the way the default one does. (The shaders themselves work just fine, though.)
+- I disabled the "Minimum Brightness" property in "Transparent" Rendering Mode (or, more technically speaking, whenever the `_ALPHAPREMULTIPLY_ON` keyword is on), because it won't work correctly (or at least I don't know how to make it work).
 
 
 ### Contact
