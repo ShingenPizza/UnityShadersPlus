@@ -228,6 +228,12 @@ half4 fragForwardBaseSimpleInternal (VertexOutputBaseSimple i)
 
     half3 c = BRDF3_Indirect(s.diffColor, s.specColor, gi.indirect, PerVertexGrazingTerm(i, s), PerVertexFresnelTerm(i));
     c += BRDF3DirectSimple(s.diffColor, s.specColor, s.smoothness, rl) * attenuatedLightColor;
+
+#ifndef _ALPHAPREMULTIPLY_ON
+    // Plus - Minimum Brightness
+    c.rgb = max(c.rgb / s.diffColor, _LightingMinLightBrightness) * s.diffColor;
+#endif
+
     c += Emission(i.tex.xy);
 
     #ifdef _SPECULARS_ON
