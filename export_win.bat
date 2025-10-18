@@ -44,5 +44,6 @@ copy ".\DefaultResourcesExtra\Unlit\Unlit-Color Plus.shader" ".\export\Unlit-Col
 copy ".\DefaultResourcesExtra\Unlit\Unlit-Normal Plus.shader" ".\export\Unlit-Normal Plus.shader"
 
 copy ".\README.md" ".\export\README.md"
+copy ".\version.txt" ".\export\version.txt"
 
 copy ".\license.txt" ".\export\license.txt"
