@@ -26,7 +26,8 @@ namespace ShingenPizza.Shaders.UnityPlus
             alphaCutoff = FindProperty("_Cutoff", props, false);
             albedoColor = FindProperty("_Color", props, false);
 
-            FindPropertiesPlus(props);
+            FindPropertiesPlusVisibility(props);
+            FindPropertiesPlusCull(props);
         }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
@@ -50,7 +51,10 @@ namespace ShingenPizza.Shaders.UnityPlus
 
             // My stuff
             EditorGUILayout.Space();
-            PlusOptions(material);
+            GUILayout.Label("Plus Options", EditorStyles.largeLabel);
+            VisibilityOptions();
+            GUILayout.Label("Other Options", EditorStyles.boldLabel);
+            TwoSidedPopup();
         }
     }
 } // namespace ShingenPizza.Shaders.UnityPlus
