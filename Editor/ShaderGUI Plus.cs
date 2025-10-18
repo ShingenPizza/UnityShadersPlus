@@ -26,6 +26,8 @@ namespace ShingenPizza.Shaders.UnityPlus
         MaterialProperty light_volumes_speculars;
         MaterialProperty light_volumes_dominant_speculars;
 
+        protected MaterialProperty min_brightness;
+
         protected MaterialProperty cullMode;
 
         protected MaterialEditor m_MaterialEditor;
@@ -34,6 +36,7 @@ namespace ShingenPizza.Shaders.UnityPlus
         {
             FindPropertiesPlusVisibility(props);
             FindPropertiesPlusLightVolumes(props);
+            FindPropertiesPlusMinBrightness(props);
             FindPropertiesPlusCull(props);
         }
 
@@ -57,11 +60,16 @@ namespace ShingenPizza.Shaders.UnityPlus
             light_volumes_dominant_speculars = FindProperty("_DominantDirSpeculars", props);
         }
 
+        public void FindPropertiesPlusMinBrightness(MaterialProperty[] props)
+        {
+            min_brightness = FindProperty("_LightingMinLightBrightness", props);
+        }
+
         public void FindPropertiesPlusCull(MaterialProperty[] props)
         {
             cullMode = FindProperty("_Cull", props);
         }
-        
+
         protected void PlusOptions(Material material)
         {
             GUILayout.Label("Plus Options", EditorStyles.largeLabel);
@@ -167,7 +175,13 @@ namespace ShingenPizza.Shaders.UnityPlus
         protected void OtherOptions()
         {
             GUILayout.Label("Other Options", EditorStyles.boldLabel);
+            MinBrightnessOptions();
             TwoSidedPopup();
+        }
+
+        protected void MinBrightnessOptions()
+        {
+            m_MaterialEditor.ShaderProperty(min_brightness, EditorGUIUtility.TrTextContent(min_brightness.displayName));
         }
 
         protected void TwoSidedPopup()
