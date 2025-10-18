@@ -43,5 +43,6 @@ cp "./DefaultResourcesExtra/Unlit/Unlit-Color Plus.shader" "./export/Unlit-Color
 cp "./DefaultResourcesExtra/Unlit/Unlit-Normal Plus.shader" "./export/Unlit-Normal Plus.shader"
 
 cp "./README.md" "./export/README.md"
+cp "./version.txt" "./export/version.txt"
 
 cp "./license.txt" "./export/license.txt"
