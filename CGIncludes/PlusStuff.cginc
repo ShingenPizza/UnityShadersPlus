@@ -19,6 +19,10 @@ float _VRC_Visible_Mirror_Screenshot;
 
 half _LightingMinLightBrightness;
 
+half _DoubleSidedLighting;
+sampler2D _TranslucencyMap;
+half _Translucency;
+
 
 void check_visibility()
 {
@@ -48,6 +52,15 @@ void check_visibility()
         if (_VRChatMirrorMode == 0) { if (!_VRC_Visible_Screenshot) { discard; } }
         else { if (!_VRC_Visible_Mirror_Screenshot) { discard; } }
     }
+}
+
+inline half Translucency(float2 uv)
+{
+    #ifdef _TRANSLUCENCYMAP
+    return _Translucency * tex2D(_TranslucencyMap, uv).b;
+    #else
+    return _Translucency;
+    #endif
 }
 
 #endif // SHINGENPIZZA_PLUS_STUFF

@@ -21,8 +21,8 @@
     #include "UnityStandardCore_Plus.cginc"
     VertexOutputForwardBase vertBase (VertexInput v) { return vertForwardBase(v); }
     VertexOutputForwardAdd vertAdd (VertexInput v) { return vertForwardAdd(v); }
-    half4 fragBase (VertexOutputForwardBase i) : SV_Target { return fragForwardBaseInternal(i); }
-    half4 fragAdd (VertexOutputForwardAdd i) : SV_Target { return fragForwardAddInternal(i); }
+    half4 fragBase (VertexOutputForwardBase i, bool isFrontFace : SV_IsFrontFace) : SV_Target { return fragForwardBaseInternal(i, isFrontFace); }
+    half4 fragAdd (VertexOutputForwardAdd i, bool isFrontFace : SV_IsFrontFace) : SV_Target { return fragForwardAddInternal(i, isFrontFace); }
 #endif
 
 #endif // UNITY_STANDARD_CORE_FORWARD_INCLUDED

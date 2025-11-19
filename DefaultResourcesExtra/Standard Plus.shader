@@ -58,6 +58,11 @@ Shader "ShingenPizza/Standard Plus"
 		// Plus - Face Culling
         [Enum(Off,0,Front,1,Back,2)] _Cull("__cull", Float) = 2.0
 
+		// Plus - Double-Sided Lighting and Translucency
+        [Toggle] _DoubleSidedLighting("Double-Sided Lighting", Float) = 0.0
+        _TranslucencyMap("Translucency Map (B)", 2D) = "white" {}
+        _Translucency("Translucency", Range(0.0, 1.0)) = 0.0
+
         // Plus - VRC Light Volumes
 		[Toggle(_LIGHTVOLUMES_ON)] _LightVolumes("Enable Light Volumes", Float) = 1
 		[Toggle(_SPECULARS_ON)] _Speculars("Speculars", Float) = 1
@@ -113,6 +118,9 @@ Shader "ShingenPizza/Standard Plus"
 		    #pragma shader_feature_local _LIGHTVOLUMES_ON
 		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
 
+		    // Plus - Translucency
+		    #pragma shader_feature_local _TRANSLUCENCYMAP
+
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
@@ -149,6 +157,9 @@ Shader "ShingenPizza/Standard Plus"
             #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
             #pragma shader_feature_local _DETAIL_MULX2
             #pragma shader_feature_local _PARALLAXMAP
+
+		    // Plus - Translucency
+		    #pragma shader_feature_local _TRANSLUCENCYMAP
 
             #pragma multi_compile_fwdadd_fullshadows
             #pragma multi_compile_fog
@@ -218,6 +229,9 @@ Shader "ShingenPizza/Standard Plus"
 		    #pragma shader_feature_local _SPECULARS_ON
 		    #pragma shader_feature_local _LIGHTVOLUMES_ON
 		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
+
+		    // Plus - Translucency
+		    #pragma shader_feature_local _TRANSLUCENCYMAP
 
             #pragma multi_compile_prepassfinal
             #pragma multi_compile_instancing
@@ -295,6 +309,9 @@ Shader "ShingenPizza/Standard Plus"
 		    #pragma shader_feature_local _LIGHTVOLUMES_ON
 		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
 
+		    // Plus - Translucency
+		    #pragma shader_feature_local _TRANSLUCENCYMAP
+
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
 
@@ -326,6 +343,9 @@ Shader "ShingenPizza/Standard Plus"
             #pragma shader_feature_local _DETAIL_MULX2
             // SM2.0: NOT SUPPORTED shader_feature_local _PARALLAXMAP
             #pragma skip_variants SHADOWS_SOFT
+
+		    // Plus - Translucency
+		    #pragma shader_feature_local _TRANSLUCENCYMAP
 
             #pragma multi_compile_fwdadd_fullshadows
             #pragma multi_compile_fog
