@@ -87,7 +87,7 @@ inline half4 LightingStandard (SurfaceOutputStandard s, float3 viewDir, UnityGI 
     half outputAlpha;
     s.Albedo = PreMultiplyAlpha (s.Albedo, s.Alpha, oneMinusReflectivity, /*out*/ outputAlpha);
 
-    half4 c = UNITY_BRDF_PBS (s.Albedo, specColor, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect);
+    half4 c = UNITY_BRDF_PBS (s.Albedo, specColor, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect, true);
     c.a = outputAlpha;
     return c;
 }
@@ -98,7 +98,7 @@ inline half4 LightingStandard_Deferred (SurfaceOutputStandard s, float3 viewDir,
     half3 specColor;
     s.Albedo = DiffuseAndSpecularFromMetallic (s.Albedo, s.Metallic, /*out*/ specColor, /*out*/ oneMinusReflectivity);
 
-    half4 c = UNITY_BRDF_PBS (s.Albedo, specColor, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect);
+    half4 c = UNITY_BRDF_PBS (s.Albedo, specColor, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect, true);
 
     UnityStandardData data;
     data.diffuseColor   = s.Albedo;
@@ -153,7 +153,7 @@ inline half4 LightingStandardSpecular (SurfaceOutputStandardSpecular s, float3 v
     half outputAlpha;
     s.Albedo = PreMultiplyAlpha (s.Albedo, s.Alpha, oneMinusReflectivity, /*out*/ outputAlpha);
 
-    half4 c = UNITY_BRDF_PBS (s.Albedo, s.Specular, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect);
+    half4 c = UNITY_BRDF_PBS (s.Albedo, s.Specular, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect, true);
     c.a = outputAlpha;
     return c;
 }
@@ -164,7 +164,7 @@ inline half4 LightingStandardSpecular_Deferred (SurfaceOutputStandardSpecular s,
     half oneMinusReflectivity;
     s.Albedo = EnergyConservationBetweenDiffuseAndSpecular (s.Albedo, s.Specular, /*out*/ oneMinusReflectivity);
 
-    half4 c = UNITY_BRDF_PBS (s.Albedo, s.Specular, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect);
+    half4 c = UNITY_BRDF_PBS (s.Albedo, s.Specular, oneMinusReflectivity, s.Smoothness, s.Normal, viewDir, gi.light, gi.indirect, true);
 
     UnityStandardData data;
     data.diffuseColor   = s.Albedo;

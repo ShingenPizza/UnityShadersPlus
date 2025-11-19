@@ -60,7 +60,7 @@ namespace ShingenPizza.Shaders.UnityPlus
             light_volumes_dominant_speculars = FindProperty("_DominantDirSpeculars", props);
         }
 
-        public void FindPropertiesPlusMinBrightness(MaterialProperty[] props)
+        protected void FindPropertiesPlusMinBrightness(MaterialProperty[] props)
         {
             min_brightness = FindProperty("_LightingMinLightBrightness", props);
         }

@@ -62,7 +62,7 @@ half4 CalculateLight (unity_v2f_deferred i)
     ind.diffuse = 0;
     ind.specular = 0;
 
-    half4 res = UNITY_BRDF_PBS (data.diffuseColor, data.specularColor, oneMinusReflectivity, data.smoothness, data.normalWorld, -eyeVec, light, ind);
+    half4 res = UNITY_BRDF_PBS (data.diffuseColor, data.specularColor, oneMinusReflectivity, data.smoothness, data.normalWorld, -eyeVec, light, ind, false);
 
     return res;
 }
