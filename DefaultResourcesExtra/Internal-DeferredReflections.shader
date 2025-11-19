@@ -82,7 +82,7 @@ half4 frag (unity_v2f_deferred i) : SV_Target
     ind.diffuse = 0;
     ind.specular = env0;
 
-    half3 rgb = UNITY_BRDF_PBS (0, data.specularColor, oneMinusReflectivity, data.smoothness, data.normalWorld, -eyeVec, light, ind).rgb;
+    half3 rgb = UNITY_BRDF_PBS (0, data.specularColor, oneMinusReflectivity, data.smoothness, data.normalWorld, -eyeVec, light, ind, false).rgb;
 
     // Calculate falloff value, so reflections on the edges of the probe would gradually blend to previous reflection.
     // Also this ensures that pixels not located in the reflection probe AABB won't

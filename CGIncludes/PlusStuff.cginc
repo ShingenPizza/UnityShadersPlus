@@ -17,7 +17,7 @@ float _VRC_Visible_Mirror_Camera;
 float _VRC_Visible_Mirror_VRCLens;
 float _VRC_Visible_Mirror_Screenshot;
 
-float _LightingMinLightBrightness;
+half _LightingMinLightBrightness;
 
 
 void check_visibility()
