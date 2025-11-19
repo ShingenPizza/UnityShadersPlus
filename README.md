@@ -36,6 +36,11 @@ support for the cool new "voxel based light probes replacement" (v2.1).
   Support for the "Minimum Brightness" property, allowing you to remain visible in darker areas of VRC worlds.<br>
 - **Face Culling**<br>
   Control over which faces (front, back, or neither) are culled (not-rendered), e.g. if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces \[a\]\[b\].<br>
+- **Double-Sided Lighting**<br>
+  <img src="https://github.com/user-attachments/assets/698e823e-c4e3-4b01-84df-b4575846e004" width="512" alt="presenting the Double-Sided Lighting difference" /><br>
+  Combined with disabled Face Culling allows both sides of a mesh to be lit properly.<br>
+- **Translucency**<br>
+  Simple simulation of light transmission, allowing thin surfaces to be "lit from behind". Technically, it blends colors of both sides of faces in the given ratio, and because of that it should be used with enabled Double-Sided Lighting.<br>
 
 \[a\] See the "Known issues" section below.<br>
 \[b\] Basic functionality of disabling back-face culling is available in some of the original shaders already as "Two Sided". I expanded it with front-face culling and copied to other shaders.<br>
