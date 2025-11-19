@@ -9,6 +9,8 @@
 #include "UnityStandardConfig.cginc"
 #include "UnityLightingCommon Plus.cginc"
 
+#include "PlusStuff.cginc"
+
 //-----------------------------------------------------------------------------
 // Helper to convert smoothness to roughness
 //-----------------------------------------------------------------------------
@@ -236,7 +238,9 @@ inline float3 Unity_SafeNormalize(float3 inVec)
 // * Schlick approximation for Fresnel
 half4 BRDF1_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness,
     float3 normal, float3 viewDir,
-    UnityLight light, UnityIndirect gi)
+    UnityLight light, UnityIndirect gi
+    , bool indirect
+    )
 {
     float perceptualRoughness = SmoothnessToPerceptualRoughness (smoothness);
     float3 halfDir = Unity_SafeNormalize (float3(light.dir) + viewDir);
@@ -310,7 +314,13 @@ half4 BRDF1_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivi
     specularTerm *= any(specColor) ? 1.0 : 0.0;
 
     half grazingTerm = saturate(smoothness + (1-oneMinusReflectivity));
-    half3 color =   diffColor * (gi.diffuse + light.color * diffuseTerm)
+    half3 light_brightness = gi.diffuse + light.color * diffuseTerm;
+    // Plus - Minimum Brightness
+    if (indirect)
+    {
+        light_brightness = max(light_brightness, _LightingMinLightBrightness);
+    }
+    half3 color =   diffColor * light_brightness
                     + specularTerm * light.color * FresnelTerm (specColor, lh)
                     + surfaceReduction * gi.specular * FresnelLerp (specColor, grazingTerm, nv);
 
@@ -327,7 +337,9 @@ half4 BRDF1_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivi
 // * Fresnel approximated with 1/LdotH
 half4 BRDF2_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness,
     float3 normal, float3 viewDir,
-    UnityLight light, UnityIndirect gi)
+    UnityLight light, UnityIndirect gi
+    , bool indirect
+    )
 {
     float3 halfDir = Unity_SafeNormalize (float3(light.dir) + viewDir);
 
@@ -404,8 +416,15 @@ half4 BRDF2_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivi
     surfaceReduction = 1.0 - roughness*perceptualRoughness*surfaceReduction;
 
     half grazingTerm = saturate(smoothness + (1-oneMinusReflectivity));
-    half3 color =   (diffColor + specularTerm * specColor) * light.color * nl
-                    + gi.diffuse * diffColor
+    half3 tmp_lcnl = light.color * nl;
+    half3 light_brightness = gi.diffuse + tmp_lcnl;
+    // Plus - Minimum Brightness
+    if (indirect)
+    {
+        light_brightness = max(light_brightness, _LightingMinLightBrightness);
+    }
+    half3 color =   diffColor * light_brightness
+                    + specularTerm * specColor * tmp_lcnl
                     + surfaceReduction * gi.specular * FresnelLerpFast (specColor, grazingTerm, nv);
 
     return half4(color, 1);
@@ -441,7 +460,9 @@ half3 BRDF3_Indirect(half3 diffColor, half3 specColor, UnityIndirect indirect, h
 // TODO: specular is too weak in Linear rendering mode
 half4 BRDF3_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness,
     float3 normal, float3 viewDir,
-    UnityLight light, UnityIndirect gi)
+    UnityLight light, UnityIndirect gi
+    , bool indirect
+    )
 {
     float3 reflDir = reflect (viewDir, normal);
 
@@ -456,7 +477,13 @@ half4 BRDF3_Unity_PBS (half3 diffColor, half3 specColor, half oneMinusReflectivi
     half grazingTerm = saturate(smoothness + (1-oneMinusReflectivity));
 
     half3 color = BRDF3_Direct(diffColor, specColor, rlPow4, smoothness);
-    color *= light.color * nl;
+    half3 light_brightness = light.color * nl;
+    // Plus - Minimum Brightness
+    if (indirect)
+    {
+        light_brightness = max(light_brightness, _LightingMinLightBrightness);
+    }
+    color *= light_brightness;
     color += BRDF3_Indirect(diffColor, specColor, gi, grazingTerm, fresnelTerm);
 
     return half4(color, 1);

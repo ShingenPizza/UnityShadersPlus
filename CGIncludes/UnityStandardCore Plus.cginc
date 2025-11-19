@@ -465,12 +465,7 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     half occlusion = Occlusion(i.tex.xy);
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, mainLight);
 
-    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect);
-
-#ifndef _ALPHAPREMULTIPLY_ON
-    // Plus - Minimum Brightness
-    c.rgb = max(c.rgb / s.diffColor, _LightingMinLightBrightness) * s.diffColor;
-#endif
+    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true);
 
     c.rgb += Emission(i.tex.xy);
 
@@ -575,7 +570,7 @@ half4 fragForwardAddInternal (VertexOutputForwardAdd i)
     UnityLight light = AdditiveLight (IN_LIGHTDIR_FWDADD(i), atten);
     UnityIndirect noIndirect = ZeroIndirect ();
 
-    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, light, noIndirect);
+    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, light, noIndirect, false);
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG_COLOR(_unity_fogCoord, c.rgb, half4(0,0,0,0)); // fog towards black in additive pass
@@ -706,12 +701,7 @@ void fragDeferred (
 
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
 
-    half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect).rgb;
-
-#ifndef _ALPHAPREMULTIPLY_ON
-    // Plus - Minimum Brightness
-    emissiveColor.rgb = max(emissiveColor.rgb / s.diffColor, _LightingMinLightBrightness) * s.diffColor;
-#endif
+    half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true).rgb;
 
     #ifdef _EMISSION
         emissiveColor += Emission (i.tex.xy);
