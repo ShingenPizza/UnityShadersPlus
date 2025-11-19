@@ -168,10 +168,10 @@ float3 PerPixelWorldNormal(float4 i_tex, float4 tangentToWorld[3])
 #define IN_LIGHTDIR_FWDADD(i) half3(i.tangentToWorldAndLightDir[0].w, i.tangentToWorldAndLightDir[1].w, i.tangentToWorldAndLightDir[2].w)
 
 #define FRAGMENT_SETUP(x) FragmentCommonData x = \
-    FragmentSetup(i.tex, i.eyeVec.xyz, IN_VIEWDIR4PARALLAX(i), i.tangentToWorldAndPackedData, IN_WORLDPOS(i));
+    FragmentSetup(i.tex, i.eyeVec.xyz, IN_VIEWDIR4PARALLAX(i), i.tangentToWorldAndPackedData, IN_WORLDPOS(i), isFrontFace);
 
 #define FRAGMENT_SETUP_FWDADD(x) FragmentCommonData x = \
-    FragmentSetup(i.tex, i.eyeVec.xyz, IN_VIEWDIR4PARALLAX_FWDADD(i), i.tangentToWorldAndLightDir, IN_WORLDPOS_FWDADD(i));
+    FragmentSetup(i.tex, i.eyeVec.xyz, IN_VIEWDIR4PARALLAX_FWDADD(i), i.tangentToWorldAndLightDir, IN_WORLDPOS_FWDADD(i), isFrontFace);
 
 struct FragmentCommonData
 {
@@ -268,7 +268,7 @@ inline FragmentCommonData MetallicSetup (float4 i_tex)
 }
 
 // parallax transformed texcoord is used to sample occlusion
-inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, half3 i_viewDirForParallax, float4 tangentToWorld[3], float3 i_posWorld)
+inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, half3 i_viewDirForParallax, float4 tangentToWorld[3], float3 i_posWorld, bool isFrontFace)
 {
     i_tex = Parallax(i_tex, i_viewDirForParallax);
 
@@ -278,7 +278,7 @@ inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, ha
     #endif
 
     FragmentCommonData o = UNITY_SETUP_BRDF_INPUT (i_tex);
-    o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
+    o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld) * (1 + -2 * (_DoubleSidedLighting && !isFrontFace)); // reverse the normals if _DoubleSidedLighting is being used and you're looking at the back face
     o.eyeVec = NormalizePerPixelNormal(i_eyeVec);
     o.posWorld = i_posWorld;
 
@@ -449,7 +449,7 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
     return o;
 }
 
-half4 fragForwardBaseInternal (VertexOutputForwardBase i)
+half4 fragForwardBaseInternal (VertexOutputForwardBase i, bool isFrontFace)
 {
     check_visibility();
 
@@ -465,29 +465,44 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     half occlusion = Occlusion(i.tex.xy);
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, mainLight);
 
-    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true);
-
-    c.rgb += Emission(i.tex.xy);
-
+    half4 c_visible = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true);
     #ifdef _SPECULARS_ON
     if (_UdonLightVolumeEnabled != 0)
     {
         #ifdef _DOMINANTDIRSPECULARS_ON
-        c.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        c_visible.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
         #else
-        c.rgb += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        c_visible.rgb += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
         #endif
     }
     #endif
+    half4 c_other = 0;
+    if (_DoubleSidedLighting)
+    {
+        c_other += UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, -s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true);
+        #ifdef _SPECULARS_ON
+        if (_UdonLightVolumeEnabled != 0)
+        {
+            #ifdef _DOMINANTDIRSPECULARS_ON
+            c_other.rgb += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, -s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+            #else
+            c_other.rgb += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, -s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+            #endif
+        }
+        #endif
+    }
+    half4 c = lerp(c_visible, c_other, Translucency(i.tex.xy));
+
+    c.rgb += Emission(i.tex.xy);
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
     return OutputForward (c, s.alpha);
 }
 
-half4 fragForwardBase (VertexOutputForwardBase i) : SV_Target   // backward compatibility (this used to be the fragment entry function)
+half4 fragForwardBase (VertexOutputForwardBase i, bool isFrontFace) : SV_Target   // backward compatibility (this used to be the fragment entry function)
 {
-    return fragForwardBaseInternal(i);
+    return fragForwardBaseInternal(i, isFrontFace);
 }
 
 // ------------------------------------------------------------------
@@ -556,7 +571,7 @@ VertexOutputForwardAdd vertForwardAdd (VertexInput v)
     return o;
 }
 
-half4 fragForwardAddInternal (VertexOutputForwardAdd i)
+half4 fragForwardAddInternal (VertexOutputForwardAdd i, bool isFrontFace)
 {
     check_visibility();
 
@@ -570,16 +585,22 @@ half4 fragForwardAddInternal (VertexOutputForwardAdd i)
     UnityLight light = AdditiveLight (IN_LIGHTDIR_FWDADD(i), atten);
     UnityIndirect noIndirect = ZeroIndirect ();
 
-    half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, light, noIndirect, false);
+    half4 c_visible = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, light, noIndirect, false);
+    half4 c_other = 0;
+    if (_DoubleSidedLighting)
+    {
+        c_other += UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, -s.normalWorld, -s.eyeVec, light, noIndirect, false);
+    }
+    half4 c = lerp(c_visible, c_other, Translucency(i.tex.xy));
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG_COLOR(_unity_fogCoord, c.rgb, half4(0,0,0,0)); // fog towards black in additive pass
     return OutputForward (c, s.alpha);
 }
 
-half4 fragForwardAdd (VertexOutputForwardAdd i) : SV_Target     // backward compatibility (this used to be the fragment entry function)
+half4 fragForwardAdd (VertexOutputForwardAdd i, bool isFrontFace) : SV_Target     // backward compatibility (this used to be the fragment entry function)
 {
-    return fragForwardAddInternal(i);
+    return fragForwardAddInternal(i, isFrontFace);
 }
 
 // ------------------------------------------------------------------
@@ -668,6 +689,7 @@ void fragDeferred (
 #if defined(SHADOWS_SHADOWMASK) && (UNITY_ALLOWED_MRT_COUNT > 4)
     ,out half4 outShadowMask : SV_Target4       // RT4: shadowmask (rgba)
 #endif
+    , bool isFrontFace : SV_IsFrontFace
 )
 {
     check_visibility();
@@ -701,17 +723,33 @@ void fragDeferred (
 
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
 
-    half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true).rgb;
+    half3 emissiveColor_visible = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true).rgb;
     #ifdef _SPECULARS_ON
     if (_UdonLightVolumeEnabled != 0)
     {
         #ifdef _DOMINANTDIRSPECULARS_ON
-        emissiveColor += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        emissiveColor_visible += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
         #else
-        emissiveColor += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        emissiveColor_visible += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
         #endif
     }
     #endif
+    half3 emissiveColor_other = 0;
+    if (_DoubleSidedLighting)
+    {
+        emissiveColor_other += UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, -s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true).rgb;
+        #ifdef _SPECULARS_ON
+        if (_UdonLightVolumeEnabled != 0)
+        {
+            #ifdef _DOMINANTDIRSPECULARS_ON
+            emissiveColor_other += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, -s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+            #else
+            emissiveColor_other += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, -s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+            #endif
+        }
+        #endif
+    }
+    half3 emissiveColor = lerp(emissiveColor_visible, emissiveColor_other, Translucency(i.tex.xy));
 
     #ifdef _EMISSION
         emissiveColor += Emission (i.tex.xy);

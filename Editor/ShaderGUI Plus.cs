@@ -24,6 +24,9 @@ namespace ShingenPizza.Shaders.UnityPlus
         protected MaterialProperty min_brightness;
 
         protected MaterialProperty cullMode;
+        protected MaterialProperty double_sided_lighting;
+        protected MaterialProperty translucency_map;
+        protected MaterialProperty translucency;
 
         protected MaterialEditor m_MaterialEditor;
 
@@ -33,6 +36,7 @@ namespace ShingenPizza.Shaders.UnityPlus
             FindPropertiesPlusLightVolumes(props);
             FindPropertiesPlusMinBrightness(props);
             FindPropertiesPlusCull(props);
+            FindPropertiesPlusDoubleSidedLightingAndTranslucency(props);
         }
 
         protected void FindPropertiesPlusVisibility(MaterialProperty[] props)
@@ -65,12 +69,19 @@ namespace ShingenPizza.Shaders.UnityPlus
             cullMode = FindProperty("_Cull", props);
         }
 
+        protected void FindPropertiesPlusDoubleSidedLightingAndTranslucency(MaterialProperty[] props)
+        {
+            double_sided_lighting = FindProperty("_DoubleSidedLighting", props);
+            translucency_map = FindProperty("_TranslucencyMap", props);
+            translucency = FindProperty("_Translucency", props);
+        }
+
         protected void PlusOptions(Material material)
         {
             GUILayout.Label("Plus Options", EditorStyles.largeLabel);
             VisibilityOptions();
             LightVolumesOptions(material);
-            OtherOptions();
+            OtherOptions(material);
         }
 
         protected void VisibilityOptions()
@@ -167,11 +178,12 @@ namespace ShingenPizza.Shaders.UnityPlus
             EditorGUI.showMixedValue = false;
         }
 
-        protected void OtherOptions()
+        protected void OtherOptions(Material material)
         {
             GUILayout.Label("Other Options", EditorStyles.boldLabel);
             MinBrightnessOptions();
             TwoSidedPopup();
+            DoubleSidedLightingAndTranslucencyOptions(material);
         }
 
         protected void MinBrightnessOptions()
@@ -184,6 +196,33 @@ namespace ShingenPizza.Shaders.UnityPlus
             if (cullMode == null) { return; }
 
             m_MaterialEditor.ShaderProperty(cullMode, EditorGUIUtility.TrTextContent("Face Culling", "Select which faces of the geometry to cull (not-render)."));
+        }
+
+        protected void DoubleSidedLightingAndTranslucencyOptions(Material material)
+        {
+            m_MaterialEditor.ShaderProperty(double_sided_lighting, double_sided_lighting.displayName);
+
+            if (double_sided_lighting.floatValue > 0f && cullMode.floatValue > 0f)
+            {
+                EditorGUILayout.HelpBox($"{double_sided_lighting.displayName} won't be visible on culled faces! But it's fine if you're using it just for {translucency.displayName}.", MessageType.Warning);
+            }
+
+            EditorGUI.BeginChangeCheck();
+            m_MaterialEditor.TexturePropertySingleLine(EditorGUIUtility.TrTextContent($"{translucency.displayName} (B)"), translucency_map, translucency);
+            if (EditorGUI.EndChangeCheck())
+            {
+                SetKeyword(material, "_TRANSLUCENCYMAP", translucency_map.textureValue);
+            }
+
+            if (translucency.floatValue > 0f && double_sided_lighting.floatValue == 0f)
+            {
+                EditorGUILayout.HelpBox($"{translucency.displayName} works better with {double_sided_lighting.displayName} enabled!", MessageType.Warning);
+            }
+
+            if (translucency.floatValue > 0.5f)
+            {
+                EditorGUILayout.HelpBox($"{translucency.displayName} > 0.5 means the final color will be more dependant on how the object is back-lit, than how it's actually lit from the front - generally it should be kept below 0.5, but you do you!", MessageType.Warning);
+            }
         }
 
         protected static void SetKeyword(Material m, string keyword, bool state)
