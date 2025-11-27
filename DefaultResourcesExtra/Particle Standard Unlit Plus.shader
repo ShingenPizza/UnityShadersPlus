@@ -47,7 +47,8 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
         [HideInInspector] _SrcBlend ("__src", Float) = 1.0
         [HideInInspector] _DstBlend ("__dst", Float) = 0.0
         [HideInInspector] _ZWrite ("__zw", Float) = 1.0
-        [HideInInspector] _Cull ("__cull", Float) = 2.0
+		// Plus - Face Culling
+        [Enum(Off,0,Front,1,Back,2)] _Cull("__cull", Float) = 2.0
         [HideInInspector] _SoftParticlesEnabled ("__softparticlesenabled", Float) = 0.0
         [HideInInspector] _CameraFadingEnabled ("__camerafadingenabled", Float) = 0.0
         [HideInInspector] _SoftParticleFadeParams ("__softparticlefadeparams", Vector) = (0,0,0,0)
