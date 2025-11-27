@@ -183,7 +183,7 @@ namespace ShingenPizza.Shaders.UnityPlus
                 GUILayout.Label(Styles.mainOptionsText, EditorStyles.boldLabel);
 
                 FlipbookBlendingPopup();
-                TwoSidedPopup(material);
+                TwoSidedPopup(); // TwoSidedPopup(material);
                 FadingPopup(material);
                 DistortionPopup(material);
 
@@ -306,21 +306,21 @@ namespace ShingenPizza.Shaders.UnityPlus
             EditorGUI.showMixedValue = false;
         }
 
-        void TwoSidedPopup(Material material)
-        {
-            EditorGUI.showMixedValue = cullMode.hasMixedValue;
-            var enabled = (cullMode.floatValue == (float)UnityEngine.Rendering.CullMode.Off);
-
-            EditorGUI.BeginChangeCheck();
-            enabled = EditorGUILayout.Toggle(Styles.twoSidedEnabled, enabled);
-            if (EditorGUI.EndChangeCheck())
-            {
-                m_MaterialEditor.RegisterPropertyChangeUndo("Two Sided Enabled");
-                cullMode.floatValue = enabled ? (float)UnityEngine.Rendering.CullMode.Off : (float)UnityEngine.Rendering.CullMode.Back;
-            }
-
-            EditorGUI.showMixedValue = false;
-        }
+        // void TwoSidedPopup(Material material)
+        // {
+        //     EditorGUI.showMixedValue = cullMode.hasMixedValue;
+        //     var enabled = (cullMode.floatValue == (float)UnityEngine.Rendering.CullMode.Off);
+        //
+        //     EditorGUI.BeginChangeCheck();
+        //     enabled = EditorGUILayout.Toggle(Styles.twoSidedEnabled, enabled);
+        //     if (EditorGUI.EndChangeCheck())
+        //     {
+        //         m_MaterialEditor.RegisterPropertyChangeUndo("Two Sided Enabled");
+        //         cullMode.floatValue = enabled ? (float)UnityEngine.Rendering.CullMode.Off : (float)UnityEngine.Rendering.CullMode.Back;
+        //     }
+        //
+        //     EditorGUI.showMixedValue = false;
+        // }
 
         void FadingPopup(Material material)
         {
