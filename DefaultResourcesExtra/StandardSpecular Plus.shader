@@ -55,8 +55,8 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 		// Plus - Minimum Brightness
         _LightingMinLightBrightness("Minimum Brightness", Range(0.0, 1.0)) = 0.0
 
-		// Plus - Culling
-        [HideInInspector] _Cull("__cull", Float) = 2.0
+		// Plus - Face Culling
+        [Enum(Off,0,Front,1,Back,2)] _Cull("__cull", Float) = 2.0
 
         // Plus - VRC Light Volumes
 		[Toggle(_LIGHTVOLUMES_ON)] _LightVolumes("Enable Light Volumes", Float) = 1

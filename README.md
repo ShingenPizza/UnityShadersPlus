@@ -34,11 +34,11 @@ toggles for visibility in VRChat when seen directly, in mirrors, on screenshots,
 support for the cool new "voxel based light probes replacement" (v2.1).
 - **Minimum Brightness**<br>
   Support for the "Minimum Brightness" property, allowing you to remain visible in darker areas of VRC worlds.<br>
-- **Two Sided**<br>
-turning off backface culling if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces \[a\]\[b\].
+- **Face Culling**<br>
+  Control over which faces (front, back, or neither) are culled (not-rendered), e.g. if you need a mesh to be visible from both sides, to avoid having to duplicate mesh faces \[a\]\[b\].<br>
 
 \[a\] See the "Known issues" section below.<br>
-\[b\] Available in some built-in shaders, simply copied to the others.<br>
+\[b\] Basic functionality of disabling back-face culling is available in some of the original shaders already as "Two Sided". I expanded it with front-face culling and copied to other shaders.<br>
 
 
 ### Example
@@ -70,7 +70,7 @@ Voilà!<br>
 
 
 ### Known issues:
-- The Two Sided option doesn't work when toggled in VRChat - it needs to be set before upload.
+- The Face Culling option doesn't work when toggled in VRChat - it needs to be set before upload.
 - Since I had to create a custom editor for Unlit shaders, the Inspector view doesn't look exactly the way the default one does. (The shaders themselves work just fine, though.)
 
 

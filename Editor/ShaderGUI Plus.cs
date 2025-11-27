@@ -9,11 +9,6 @@ namespace ShingenPizza.Shaders.UnityPlus
 {
     public class ShaderGUIPlus : ShaderGUI
     {
-        private static class Styles
-        {
-            public static readonly GUIContent twoSidedEnabled = EditorGUIUtility.TrTextContent("Two Sided", "Render both front and back faces of the geometry.");
-        }
-
         static readonly string[] visibility_columns = { "Normal", "Camera", "VRCLens", "Screenshot" };
         static readonly string[] visibility_rows = { "Normal", "Mirror" };
         const int visibility_width = 80;
@@ -65,7 +60,7 @@ namespace ShingenPizza.Shaders.UnityPlus
             min_brightness = FindProperty("_LightingMinLightBrightness", props);
         }
 
-        public void FindPropertiesPlusCull(MaterialProperty[] props)
+        protected void FindPropertiesPlusCull(MaterialProperty[] props)
         {
             cullMode = FindProperty("_Cull", props);
         }
@@ -188,19 +183,7 @@ namespace ShingenPizza.Shaders.UnityPlus
         {
             if (cullMode == null) { return; }
 
-            // Taken from Unity's StandardParticlesShaderGUI.cs
-            EditorGUI.showMixedValue = cullMode.hasMixedValue;
-            var enabled = (cullMode.floatValue == (float)UnityEngine.Rendering.CullMode.Off);
-
-            EditorGUI.BeginChangeCheck();
-            enabled = EditorGUILayout.Toggle(Styles.twoSidedEnabled, enabled);
-            if (EditorGUI.EndChangeCheck())
-            {
-                m_MaterialEditor.RegisterPropertyChangeUndo("Two Sided Enabled");
-                cullMode.floatValue = enabled ? (float)UnityEngine.Rendering.CullMode.Off : (float)UnityEngine.Rendering.CullMode.Back;
-            }
-
-            EditorGUI.showMixedValue = false;
+            m_MaterialEditor.ShaderProperty(cullMode, EditorGUIUtility.TrTextContent("Face Culling", "Select which faces of the geometry to cull (not-render)."));
         }
 
         protected static void SetKeyword(Material m, string keyword, bool state)

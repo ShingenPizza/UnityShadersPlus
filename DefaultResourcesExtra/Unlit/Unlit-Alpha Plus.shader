@@ -22,8 +22,8 @@ Properties {
     [ToggleOff] _VRC_Visible_Mirror_VRCLens("Visible In Mirrors To VRCLens", Float) = 1.0
     [ToggleOff] _VRC_Visible_Mirror_Screenshot("Visible In Mirrors On Screenshots", Float) = 1.0
 
-	// Plus - Culling
-    [HideInInspector] _Cull("__cull", Float) = 2.0
+	// Plus - Face Culling
+    [Enum(Off,0,Front,1,Back,2)] _Cull("__cull", Float) = 2.0
 }
 
 SubShader {
