@@ -7,7 +7,7 @@
 
 #include "UnityCG.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityLightingCommon Plus.cginc"
+#include "UnityLightingCommon_Plus.cginc"
 
 #include "PlusStuff.cginc"
 

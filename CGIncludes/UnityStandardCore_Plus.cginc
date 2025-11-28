@@ -8,11 +8,11 @@
 #include "UnityCG.cginc"
 #include "UnityShaderVariables.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityStandardInput Plus.cginc"
-#include "UnityPBSLighting Plus.cginc"
+#include "UnityStandardInput_Plus.cginc"
+#include "UnityPBSLighting_Plus.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityGBuffer.cginc"
-#include "UnityStandardBRDF Plus.cginc"
+#include "UnityStandardBRDF_Plus.cginc"
 
 #include "AutoLight.cginc"
 
