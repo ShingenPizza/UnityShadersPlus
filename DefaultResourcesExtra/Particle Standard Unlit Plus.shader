@@ -99,7 +99,7 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
                 #pragma vertex vertParticleShadowCaster
                 #pragma fragment fragParticleShadowCaster
 
-                #include "CGIncludes/UnityStandardParticleShadow Plus.cginc"
+                #include "CGIncludes/UnityStandardParticleShadow_Plus.cginc"
                 ENDCG
             }
 
@@ -126,7 +126,7 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
                 #pragma vertex vertEditorPass
                 #pragma fragment fragSceneHighlightPass
 
-                #include "CGIncludes/UnityStandardParticleEditor Plus.cginc"
+                #include "CGIncludes/UnityStandardParticleEditor_Plus.cginc"
                 ENDCG
             }
 
@@ -153,7 +153,7 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
                 #pragma vertex vertEditorPass
                 #pragma fragment fragScenePickingPass
 
-                #include "CGIncludes/UnityStandardParticleEditor Plus.cginc"
+                #include "CGIncludes/UnityStandardParticleEditor_Plus.cginc"
                 ENDCG
             }
 
@@ -178,7 +178,7 @@ Shader "ShingenPizza/Particle Standard Unlit Plus"
                 #pragma multi_compile_instancing
                 #pragma instancing_options procedural:vertInstancingSetup
 
-                #include "CGIncludes/UnityStandardParticles Plus.cginc"
+                #include "CGIncludes/UnityStandardParticles_Plus.cginc"
                 ENDCG
             }
         }
