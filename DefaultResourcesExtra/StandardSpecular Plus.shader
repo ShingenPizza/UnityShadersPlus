@@ -213,6 +213,11 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature_local _PARALLAXMAP
 
+        	// Plus - VRC Light Volumes
+		    #pragma shader_feature_local _SPECULARS_ON
+		    #pragma shader_feature_local _LIGHTVOLUMES_ON
+		    #pragma shader_feature_local _DOMINANTDIRSPECULARS_ON
+
             #pragma multi_compile_prepassfinal
             #pragma multi_compile_instancing
             // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
