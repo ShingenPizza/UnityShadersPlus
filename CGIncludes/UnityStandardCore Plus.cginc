@@ -704,6 +704,16 @@ void fragDeferred (
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
 
     half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect, true).rgb;
+    #ifdef _SPECULARS_ON
+    if (_UdonLightVolumeEnabled != 0)
+    {
+        #ifdef _DOMINANTDIRSPECULARS_ON
+        emissiveColor += LightVolumeSpecularDominant(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #else
+        emissiveColor += LightVolumeSpecular(s.albedo, s.smoothness, s.metallic, s.normalWorld, -s.eyeVec, gi.L0, gi.L1r, gi.L1g, gi.L1b);
+        #endif
+    }
+    #endif
 
     #ifdef _EMISSION
         emissiveColor += Emission (i.tex.xy);
