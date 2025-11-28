@@ -7,7 +7,7 @@
 
 // Functions sampling light environment data (lightmaps, light probes, reflection probes), which is then returned as the UnityGI struct.
 
-#include "UnityImageBasedLighting Plus.cginc"
+#include "UnityImageBasedLighting_Plus.cginc"
 #include "UnityStandardUtils.cginc"
 #include "UnityShadowLibrary.cginc"
 

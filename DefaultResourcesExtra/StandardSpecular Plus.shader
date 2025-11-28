@@ -121,7 +121,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
+            #include "CGIncludes/UnityStandardCoreForward_Plus.cginc"
 
             ENDCG
         }
@@ -156,7 +156,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
+            #include "CGIncludes/UnityStandardCoreForward_Plus.cginc"
 
             ENDCG
         }
@@ -186,7 +186,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma vertex vertShadowCaster
             #pragma fragment fragShadowCaster
 
-            #include "CGIncludes/UnityStandardShadow Plus.cginc"
+            #include "CGIncludes/UnityStandardShadow_Plus.cginc"
 
             ENDCG
         }
@@ -226,7 +226,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma vertex vertDeferred
             #pragma fragment fragDeferred
 
-            #include "CGIncludes/UnityStandardCore Plus.cginc"
+            #include "CGIncludes/UnityStandardCore_Plus.cginc"
 
             ENDCG
         }
@@ -251,7 +251,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma shader_feature_local _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
-            #include "CGIncludes/UnityStandardMeta Plus.cginc"
+            #include "CGIncludes/UnityStandardMeta_Plus.cginc"
             ENDCG
         }
     }
@@ -299,7 +299,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
+            #include "CGIncludes/UnityStandardCoreForward_Plus.cginc"
 
             ENDCG
         }
@@ -331,7 +331,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "CGIncludes/UnityStandardCoreForward Plus.cginc"
+            #include "CGIncludes/UnityStandardCoreForward_Plus.cginc"
 
             ENDCG
         }
@@ -355,7 +355,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma vertex vertShadowCaster
             #pragma fragment fragShadowCaster
 
-            #include "CGIncludes/UnityStandardShadow Plus.cginc"
+            #include "CGIncludes/UnityStandardShadow_Plus.cginc"
 
             ENDCG
         }
@@ -379,7 +379,7 @@ Shader "ShingenPizza/Standard (Specular setup) Plus"
             #pragma shader_feature_local _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
-            #include "CGIncludes/UnityStandardMeta Plus.cginc"
+            #include "CGIncludes/UnityStandardMeta_Plus.cginc"
             ENDCG
         }
     }

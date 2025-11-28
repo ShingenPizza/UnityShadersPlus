@@ -5,7 +5,7 @@
 #ifndef UNITY_STANDARD_CORE_FORWARD_SIMPLE_INCLUDED
 #define UNITY_STANDARD_CORE_FORWARD_SIMPLE_INCLUDED
 
-#include "UnityStandardCore Plus.cginc"
+#include "UnityStandardCore_Plus.cginc"
 
 #include "LightVolumes.cginc"
 

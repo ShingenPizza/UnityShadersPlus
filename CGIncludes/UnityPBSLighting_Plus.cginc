@@ -7,9 +7,9 @@
 
 #include "UnityShaderVariables.cginc"
 #include "UnityStandardConfig.cginc"
-#include "UnityLightingCommon Plus.cginc"
+#include "UnityLightingCommon_Plus.cginc"
 #include "UnityGBuffer.cginc"
-#include "UnityGlobalIllumination Plus.cginc"
+#include "UnityGlobalIllumination_Plus.cginc"
 
 //-------------------------------------------------------------------------------------
 // Default BRDF to use:
