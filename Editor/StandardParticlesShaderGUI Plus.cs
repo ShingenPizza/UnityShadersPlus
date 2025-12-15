@@ -41,13 +41,13 @@ namespace ShingenPizza.Shaders.UnityPlus
 
         private static class Styles
         {
-            public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A).");
+            // public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A).");
             public static GUIContent alphaCutoffText = EditorGUIUtility.TrTextContent("Alpha Cutoff", "Threshold for alpha cutoff.");
-            public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic", "Metallic (R) and Smoothness (A).");
+            public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic (RA)", "Metallic (R) and Smoothness (A).");
             public static GUIContent smoothnessText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness value.");
             public static GUIContent smoothnessScaleText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness scale factor.");
             public static GUIContent normalMapText = EditorGUIUtility.TrTextContent("Normal Map", "Normal Map.");
-            public static GUIContent emissionText = EditorGUIUtility.TrTextContent("Color", "Emission (RGB).");
+            public static GUIContent emissionText = EditorGUIUtility.TrTextContent("Color (RGB)", "Emission (RGB).");
 
             public static GUIContent renderingMode = EditorGUIUtility.TrTextContent("Rendering Mode", "Determines the transparency and blending method for drawing the object to the screen.");
             public static GUIContent[] blendNames = Array.ConvertAll(Enum.GetNames(typeof(BlendMode)), item => new GUIContent(item));
@@ -419,8 +419,23 @@ namespace ShingenPizza.Shaders.UnityPlus
 
         void DoAlbedoArea(Material material)
         {
-            m_MaterialEditor.TexturePropertyWithHDRColor(Styles.albedoText, albedoMap, albedoColor, true);
-            if (((BlendMode)material.GetFloat("_Mode") == BlendMode.Cutout))
+            BlendMode current_blend_mode = (BlendMode)material.GetFloat("_Mode");
+            GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo (RGB)", "Albedo (RGB)");
+
+            if (current_blend_mode != BlendMode.Opaque)
+            {
+                albedoText.text = "Albedo (RGBA)";
+                albedoText.tooltip = "Albedo (RGB) and Transparency (A)";
+            }
+            else
+            {
+                // need a reset because this object behaves like a static one
+                albedoText.text = "Albedo (RGB)";
+                albedoText.tooltip = "Albedo (RGB)";
+            }
+
+            m_MaterialEditor.TexturePropertyWithHDRColor(albedoText, albedoMap, albedoColor, true);
+            if (current_blend_mode == BlendMode.Cutout)
             {
                 m_MaterialEditor.ShaderProperty(alphaCutoff, Styles.alphaCutoffText, MaterialEditor.kMiniTextureFieldLabelIndentLevel);
             }

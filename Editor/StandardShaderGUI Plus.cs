@@ -3,6 +3,7 @@
 // Modified by ShingenPizza. More info in README.txt .
 
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,21 +36,23 @@ namespace ShingenPizza.Shaders.UnityPlus
         {
             public static GUIContent uvSetLabel = EditorGUIUtility.TrTextContent("UV Set");
 
-            public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A)");
+            // public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A)");
             public static GUIContent alphaCutoffText = EditorGUIUtility.TrTextContent("Alpha Cutoff", "Threshold for alpha cutoff");
-            public static GUIContent specularMapText = EditorGUIUtility.TrTextContent("Specular", "Specular (RGB) and Smoothness (A)");
-            public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic", "Metallic (R) and Smoothness (A)");
+            public static GUIContent specularMapText = EditorGUIUtility.TrTextContent("Specular (RGB)", "Specular (RGB)");
+            public static GUIContent specularMapText2 = EditorGUIUtility.TrTextContent("Specular (RGBA)", "Specular (RGB) and Smoothness (A)");
+            public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic (R)", "Metallic (R)");
+            public static GUIContent metallicMapText2 = EditorGUIUtility.TrTextContent("Metallic (RA)", "Metallic (R) and Smoothness (A)");
             public static GUIContent smoothnessText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness value");
             public static GUIContent smoothnessScaleText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness scale factor");
             public static GUIContent smoothnessMapChannelText = EditorGUIUtility.TrTextContent("Source", "Smoothness texture and channel");
             public static GUIContent highlightsText = EditorGUIUtility.TrTextContent("Specular Highlights", "Specular Highlights");
             public static GUIContent reflectionsText = EditorGUIUtility.TrTextContent("Reflections", "Glossy Reflections");
             public static GUIContent normalMapText = EditorGUIUtility.TrTextContent("Normal Map", "Normal Map");
-            public static GUIContent heightMapText = EditorGUIUtility.TrTextContent("Height Map", "Height Map (G)");
-            public static GUIContent occlusionText = EditorGUIUtility.TrTextContent("Occlusion", "Occlusion (G)");
-            public static GUIContent emissionText = EditorGUIUtility.TrTextContent("Color", "Emission (RGB)");
-            public static GUIContent detailMaskText = EditorGUIUtility.TrTextContent("Detail Mask", "Mask for Secondary Maps (A)");
-            public static GUIContent detailAlbedoText = EditorGUIUtility.TrTextContent("Detail Albedo x2", "Albedo (RGB) multiplied by 2");
+            public static GUIContent heightMapText = EditorGUIUtility.TrTextContent("Height Map (G)", "Height Map (G)");
+            public static GUIContent occlusionText = EditorGUIUtility.TrTextContent("Occlusion (G)", "Occlusion (G)");
+            public static GUIContent emissionText = EditorGUIUtility.TrTextContent("Color (RGB)", "Emission (RGB)");
+            public static GUIContent detailMaskText = EditorGUIUtility.TrTextContent("Detail Mask (A)", "Mask for Secondary Maps (A)");
+            public static GUIContent detailAlbedoText = EditorGUIUtility.TrTextContent("Detail Albedo x2 (RGB)", "Albedo (RGB) multiplied by 2");
             public static GUIContent detailNormalMapText = EditorGUIUtility.TrTextContent("Normal Map", "Normal Map");
 
             public static string primaryMapsText = "Main Maps";
@@ -91,6 +94,8 @@ namespace ShingenPizza.Shaders.UnityPlus
         WorkflowMode m_WorkflowMode = WorkflowMode.Specular;
 
         bool m_FirstTimeApply = true;
+
+        protected int alpha_warning_mode;
 
         public void FindProperties(MaterialProperty[] props)
         {
@@ -288,8 +293,51 @@ namespace ShingenPizza.Shaders.UnityPlus
 
         void DoAlbedoArea(Material material)
         {
-            m_MaterialEditor.TexturePropertySingleLine(Styles.albedoText, albedoMap, albedoColor);
-            if (((BlendMode)material.GetFloat("_Mode") == BlendMode.Cutout))
+            BlendMode current_blend_mode = (BlendMode)material.GetFloat("_Mode");
+            bool smoothness_channel_albedo = true;
+            if (smoothnessMapChannel != null)
+            {
+                smoothness_channel_albedo = (int)smoothnessMapChannel.floatValue == (int)SmoothnessMapChannel.AlbedoAlpha;
+            }
+
+            GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo (RGB)", "Albedo (RGB)");
+            if (current_blend_mode != BlendMode.Opaque || smoothness_channel_albedo)
+            {
+                albedoText.text = "Albedo (RGBA)";
+
+                List<string> tmp_A_list = new List<string>();
+                if (smoothness_channel_albedo)
+                {
+                    if (current_blend_mode != BlendMode.Opaque)
+                    {
+                        tmp_A_list.Add("Transparency (color A)");
+                        alpha_warning_mode = 2;
+                    }
+                    else
+                    {
+                        alpha_warning_mode = 1;
+                    }
+
+                    tmp_A_list.Add("Specular (texture A)");
+                }
+                else // if not smoothness_channel_albedo then it's gotta be non-opaque _Mode
+                {
+                    tmp_A_list.Add("Transparency (A)");
+                    alpha_warning_mode = 0;
+                }
+
+                albedoText.tooltip = "Albedo (RGB) and " + String.Join(" and ", tmp_A_list);
+            }
+            else
+            {
+                // need a reset because this object behaves like a static one
+                albedoText.text = "Albedo (RGB)";
+                albedoText.tooltip = "Albedo (RGB)";
+                alpha_warning_mode = 0;
+            }
+
+            m_MaterialEditor.TexturePropertySingleLine(albedoText, albedoMap, albedoColor);
+            if (current_blend_mode == BlendMode.Cutout)
             {
                 m_MaterialEditor.ShaderProperty(alphaCutoff, Styles.alphaCutoffText.text, MaterialEditor.kMiniTextureFieldLabelIndentLevel + 1);
             }
@@ -317,16 +365,22 @@ namespace ShingenPizza.Shaders.UnityPlus
 
         void DoSpecularMetallicArea()
         {
+            bool smoothness_channel_albedo = true;
+            if (smoothnessMapChannel != null)
+            {
+                smoothness_channel_albedo = (int)smoothnessMapChannel.floatValue == (int)SmoothnessMapChannel.AlbedoAlpha;
+            }
+
             bool hasGlossMap = false;
             if (m_WorkflowMode == WorkflowMode.Specular)
             {
                 hasGlossMap = specularMap.textureValue != null;
-                m_MaterialEditor.TexturePropertySingleLine(Styles.specularMapText, specularMap, hasGlossMap ? null : specularColor);
+                m_MaterialEditor.TexturePropertySingleLine(smoothness_channel_albedo ? Styles.specularMapText : Styles.specularMapText2, specularMap, hasGlossMap ? null : specularColor);
             }
             else if (m_WorkflowMode == WorkflowMode.Metallic)
             {
                 hasGlossMap = metallicMap.textureValue != null;
-                m_MaterialEditor.TexturePropertySingleLine(Styles.metallicMapText, metallicMap, hasGlossMap ? null : metallic);
+                m_MaterialEditor.TexturePropertySingleLine(smoothness_channel_albedo ? Styles.metallicMapText : Styles.metallicMapText2, metallicMap, hasGlossMap ? null : metallic);
             }
 
             bool showSmoothnessScale = hasGlossMap;
@@ -343,6 +397,16 @@ namespace ShingenPizza.Shaders.UnityPlus
             ++indentation;
             if (smoothnessMapChannel != null)
                 m_MaterialEditor.ShaderProperty(smoothnessMapChannel, Styles.smoothnessMapChannelText, indentation);
+
+            if (alpha_warning_mode > 0)
+            {
+                EditorGUILayout.HelpBox("Smoothness from Albedo Alpha uses only the texture's alpha!", MessageType.Warning);
+
+                if (alpha_warning_mode == 2)
+                {
+                    EditorGUILayout.HelpBox($"Setting Smoothness Source to Albedo Alpha makes Transparency use only the color field's alpha!", MessageType.Warning);
+                }
+            }
         }
 
         public static void SetupMaterialWithBlendMode(Material material, BlendMode blendMode, bool overrideRenderQueue)
