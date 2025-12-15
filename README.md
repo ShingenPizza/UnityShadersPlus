@@ -27,11 +27,11 @@ Please use the [Releases](https://github.com/ShingenPizza/UnityShadersPlus/relea
 
 ### Features
 - **Limited Visibility**<br>
-<img src="https://github.com/user-attachments/assets/73ed7cc1-2a30-4c45-ba2a-e31ebf947a05" width="512" alt="presenting the Limited Visibility feature" /><br>
-toggles for visibility in VRChat when seen directly, in mirrors, on screenshots, and on cameras (separately the default VRChat one and Hirabiki's VRCLens).
+  <img src="https://github.com/user-attachments/assets/73ed7cc1-2a30-4c45-ba2a-e31ebf947a05" width="512" alt="presenting the Limited Visibility feature" /><br>
+  Toggles for visibility in VRChat when seen directly, in mirrors, on screenshots, and on cameras (separately the default VRChat one and Hirabiki's VRCLens).<br>
 - [**VRC Light Volumes**](https://github.com/REDSIM/VRCLightVolumes)<br>
-<img src="https://github.com/user-attachments/assets/2cfe3af9-1d6c-470c-901a-218bae1a55cf" width="512" alt="presenting the VRC Light Volumes support" /><br>
-support for the cool new "voxel based light probes replacement" (v2.1).
+  <img src="https://github.com/user-attachments/assets/2cfe3af9-1d6c-470c-901a-218bae1a55cf" width="512" alt="presenting the VRC Light Volumes support" /><br>
+  Support for the cool new "voxel based light probes replacement" (v2.1).<br>
 - **Minimum Brightness**<br>
   Support for the "Minimum Brightness" property, allowing you to remain visible in darker areas of VRC worlds.<br>
 - **Face Culling**<br>
