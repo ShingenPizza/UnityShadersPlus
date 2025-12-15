@@ -41,6 +41,8 @@ support for the cool new "voxel based light probes replacement" (v2.1).
   Combined with disabled Face Culling allows both sides of a mesh to be lit properly.<br>
 - **Translucency**<br>
   Simple simulation of light transmission, allowing thin surfaces to be "lit from behind". Technically, it blends colors of both sides of faces in the given ratio, and because of that it should be used with enabled Double-Sided Lighting.<br>
+- **Dynamic GUI**<br>
+  Improved the GUIs of the shaders to make it clear which color channels are used for each property. They also change dynamically based on relevant settings.
 
 \[a\] See the "Known issues" section below.<br>
 \[b\] Basic functionality of disabling back-face culling is available in some of the original shaders already as "Two Sided". I expanded it with front-face culling and copied to other shaders.<br>
