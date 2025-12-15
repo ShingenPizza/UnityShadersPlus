@@ -42,7 +42,7 @@ namespace ShingenPizza.Shaders.UnityPlus
         public void ShaderPropertiesGUI(Material material)
         {
             // Semi-recreated original GUI
-            if (albedoMap != null) { m_MaterialEditor.ShaderProperty(albedoMap, material.shader.name.Contains("Transparent") ? "Base (RGB) Trans (A)" : "Base (RGB)"); }
+            if (albedoMap != null) { m_MaterialEditor.ShaderProperty(albedoMap, material.shader.name.Contains("Transparent") ? "Base (RGB) and Transparency (A)" : "Base (RGB)"); }
             if (alphaCutoff != null) { m_MaterialEditor.ShaderProperty(alphaCutoff, Styles.alphaCutoffText, 0); }
             if (albedoColor != null) { m_MaterialEditor.ShaderProperty(albedoColor, "Main Color"); }
             EditorGUILayout.Space(12.0f);
