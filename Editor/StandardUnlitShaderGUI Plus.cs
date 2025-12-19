@@ -1,6 +1,6 @@
 // Based on the Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-// Adapted to handle the Particle Standard Unlit shader by ShingenPizza. More info in README.txt .
+// Particle shaders GUI adapted to handle the Unlit shaders by ShingenPizza. More info in README.txt .
 
 using UnityEditor;
 using UnityEngine;
